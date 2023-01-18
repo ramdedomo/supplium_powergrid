@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property integer $id
+ * @property integer $role
+ * @property string $email
+ * @property string $password
+ * @property string $updated_at
+ * @property string $created_at
+ * @property string $firstname
+ * @property string $lastname
+ */
+class User extends Model
+{
+    
+    public static function codes()
+    {
+        return collect(
+            [
+                ['role' => 0,  'label' => 'User'],
+                ['role' => 1,  'label' => 'Admin'],
+                ['role' => 2,  'label' => 'Dean'],
+                ['role' => 3,  'label' => 'Chair'],
+            ]
+        );
+    }
+    /**
+     * The table associated with the model.
+     * 
+     * @var string
+     */
+    protected $table = 'user';
+
+    /**
+     * @var array
+     */
+    protected $fillable = ['role', 'email', 'updated_at', 'created_at', 'firstname', 'lastname'];
+}
