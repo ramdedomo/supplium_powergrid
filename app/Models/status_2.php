@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $status_desc
  * @property integer $percent
  */
-class Status extends Model
+class status extends Model
 {
     /**
      * The table associated with the model.
