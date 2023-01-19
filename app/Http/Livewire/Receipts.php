@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Support\Collection;
 use App\Models\Receipt;
 use App\Models\Status;
 use Illuminate\Support\Carbon;

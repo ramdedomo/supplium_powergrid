@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Support\Collection;
 use App\Models\Receipt;
 use App\Models\Status;
 use Illuminate\Support\Carbon;
@@ -10,6 +11,7 @@ use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 use Illuminate\Support\Facades\Auth;
+
 final class RequestList extends PowerGridComponent
 {
     use ActionButton;
