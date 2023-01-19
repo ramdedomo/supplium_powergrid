@@ -7,7 +7,6 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\User;
 use Session;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Routing\UrlGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,13 +25,8 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(UrlGenerator $url)
+    public function boot()
     {
-
-        if(env('APP_ENV') !== 'local')
-        {
-            $url->forceSchema('https');
-        }
 
         View::composer('*', function ($view) {
             $view->with('user_info', Auth::user());
