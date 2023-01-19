@@ -14,6 +14,11 @@ module.exports = {
     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     './vendor/wire-elements/modal/src/ModalComponent.php',
   ],
+  purge: [
+    './resources/**/*.blade.php',
+    './resources/**/*.js',
+    './resources/**/*.vue'
+  ],
   options: {
     safelist: [
       'sm:max-w-2xl'
