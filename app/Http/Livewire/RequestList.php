@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 final class RequestList extends PowerGridComponent
 {
     use ActionButton;
-
+    //
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
