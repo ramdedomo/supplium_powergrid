@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Receipt;
-use App\Models\status;
+use App\Models\Status;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
