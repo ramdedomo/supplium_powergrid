@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\User;
 use Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        if(env('APP_ENV') !== 'local')
+        {
+            URL::forceScheme('https');
+        }
         View::composer('*', function ($view) {
             $view->with('user_info', Auth::user());
         });
