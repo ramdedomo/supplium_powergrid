@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Status extends Model
 {
+
+    protected $primaryKey = 'status';
     /**
      * The table associated with the model.
      * 
