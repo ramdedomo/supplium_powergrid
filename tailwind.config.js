@@ -15,9 +15,17 @@ module.exports = {
     './vendor/wire-elements/modal/src/ModalComponent.php',
   ],
   purge: [
-    './resources/**/*.blade.php',
-    './resources/**/*.js',
-    './resources/**/*.vue'
+    './vendor/wire-elements/modal/resources/views/*.blade.php',
+    './storage/framework/views/*.php',
+    './resources/views/**/*.blade.php',
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+    './vendor/wireui/wireui/resources/**/*.blade.php',
+    './vendor/wireui/wireui/ts/**/*.ts',
+    './vendor/wireui/wireui/src/View/**/*.php',
+    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+    './vendor/wire-elements/modal/src/ModalComponent.php',
   ],
   options: {
     safelist: [
