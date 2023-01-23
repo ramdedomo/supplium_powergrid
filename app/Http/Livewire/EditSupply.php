@@ -34,6 +34,7 @@ class EditSupply extends ModalComponent
         $this->itemcategory = ($this->supply_details->supply_type == 0) ? "Supply" : "Equipments";
         $this->itemcolor = $this->supply_details->supply_color;
         $this->currentphoto = $this->supply_details->supply_photo;
+        $this->itemprice = $this->supply_details->supply_price;
     }
 
     
@@ -43,7 +44,8 @@ class EditSupply extends ModalComponent
             'itemname' => 'required',
             'itemstocks' => 'required|numeric|gt:0',
             'itemcategory' => 'required',
-            'itemcolor' => 'required'
+            'itemcolor' => 'required',
+            'itemprice' => 'required|numeric'
         ];
     }
 

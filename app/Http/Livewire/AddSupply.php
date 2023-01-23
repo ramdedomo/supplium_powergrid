@@ -16,6 +16,7 @@ class AddSupply extends ModalComponent
     public $itemdescription;
     public $itemcolor;
     public $itemphoto;
+    public $itemprice;
 
 
     protected function rules()
@@ -24,7 +25,8 @@ class AddSupply extends ModalComponent
             'itemname' => 'required',
             'itemstocks' => 'required|numeric|gt:0',
             'itemcategory' => 'required',
-            'itemcolor' => 'required'
+            'itemcolor' => 'required',
+            'itemprice' => 'required|numeric'
         ];
     }
 
@@ -65,6 +67,7 @@ class AddSupply extends ModalComponent
             'supply_stocks' => $this->itemstocks,
             'supply_type' => ($this->itemcategory == "Supply") ? 0 : 1,
             'supply_color' => $this->itemcolor,
+            'supply_price' => $this->itemprice,
             'supply_photo' => $photo
         ]);
         

@@ -26,7 +26,7 @@ class Supply extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id', 'supply_type', 'supply_photo', 'supply_name', 'supply_stocks', 'supply_img', 'created_at', 'updated_at', 'supply_desc', 'supply_color'];
+    protected $fillable = ['id', 'supply_price', 'supply_type', 'supply_photo', 'supply_name', 'supply_stocks', 'supply_img', 'created_at', 'updated_at', 'supply_desc', 'supply_color'];
 
     // public static function searchall($search){
     //     return empty($search) ? static::query()

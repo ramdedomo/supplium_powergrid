@@ -55,11 +55,9 @@
                 
                 <x-textarea wire:model.defer="itemdescription" label="Description (Optional)" class="mb-3" placeholder="add description here"/>
 
-                <div class="flex gap-3 mb-3">
+                <div class="grid grid-cols-3 mb-3 gap-3">
    
                     <x-inputs.number  wire:model.defer="itemstocks" right-icon="archive" label="Stock" />
-
-         
 
                     <x-select
                         wire:model.defer="itemcategory"
@@ -69,6 +67,9 @@
                         placeholder="Select"
                         :options="['Supply', 'Equipments']"
                     />
+
+                    
+                    <x-inputs.number wire:model.defer="itemprice" label="Price (PHP)" />
                 </div>
 
                 {{-- <div class="col-span-1 sm:col-span-2 cursor-pointer bg-gray-100 rounded-xl shadow-md h-72 flex items-center justify-center">
