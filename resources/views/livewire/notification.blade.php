@@ -7,7 +7,7 @@
 
         @switch($notification->notification_type)
             @case(0)
-                
+
                 @if($notification->user_id == $user->id)
                 <div wire:click='$emit("openModal", "view-request", {{ json_encode(["request" => $notification->receipt_id]) }})' class="px-4 py-3 bg-gray-100 rounded-lg shadow w-full border-b-2 border-gray-800 hover:bg-gray-800 hover:text-white">
                     <div class=" inline-flex items-center justify-between w-full">
@@ -17,7 +17,7 @@
                             </h3>
                         </div>
                         <p class="text-xs text-gray-500">
-                            5 min ago
+                            {{Carbon\Carbon::parse($notification->created_at)->diffForHumans()}}
                         </p>
                     </div>
                     <p class="mt-1 text-sm">

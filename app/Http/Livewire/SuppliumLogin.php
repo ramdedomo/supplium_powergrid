@@ -31,7 +31,12 @@ class SuppliumLogin extends Component
  
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('dashboard');
+
+            if(Auth::user()->user_type == 4){
+                return redirect('list');
+            }else{
+                return redirect('dashboard');
+            }
         }
         
         Session::flash('message', "user not found, please try again.");

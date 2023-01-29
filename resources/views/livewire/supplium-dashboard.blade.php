@@ -1,5 +1,4 @@
 <div>
-
     <x-modal wire:model.defer="simpleModal" align="center">
         <x-card title="Consent Terms">
             <p class="text-gray-600">
@@ -37,11 +36,14 @@
         <canvas id="department_request"></canvas>
     </div>
 
+    <div class="mt-2">
+        <div class="p-2 bg-gray-100 rounded-lg mb-2 flex justify-end font-bold text-gray-800">
+            <x-button flat label="Report"  right-icon="arrow-circle-right" />
+        </div>
+    </div>
+
 
     <script>
-     
-         
-
                 const ctx = document.getElementById('no_of_request').getContext('2d');
                 const myChart = new Chart(ctx, {
                     type: 'line',

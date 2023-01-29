@@ -54,6 +54,7 @@ class CheckRoles
             }elseif(Auth::user()->user_type == 4){
                 
               if(
+                $request->route()->uri() == "dashboard" ||  
                 $request->route()->uri() == "users" ||  
                 $request->route()->uri() == "items" ||
                 $request->route()->uri() == "requests"

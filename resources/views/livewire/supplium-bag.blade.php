@@ -24,8 +24,8 @@
 
                         @foreach ($supplies as $supply)
                             <li class="flex p-6 bg-gray-100 mb-2 rounded-md">
-                                <div wire:click="$emit('openModal', 'supply-order-add', {{ json_encode(["supply" => $supply->supply_id]) }})" class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 hover:scale-105 transition ease-in-out">
-                                    <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg"
+                                <div wire:click="$emit('openModal', 'supply-order-add', {{ json_encode(["supply" => $supply->supply_id]) }})" class="h-24 w-32 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 hover:scale-105 transition ease-in-out">
+                                    <img src="{{Storage::url($supply->supply_photo)}}"
                                         alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
                                         class="cursor-pointer h-full w-full object-cover object-center">
                                 </div>
