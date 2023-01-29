@@ -20,6 +20,7 @@ final class Supplies extends PowerGridComponent
     | Setup Table's general features
     |
     */
+  
     protected function getListeners()
     {
         return [
@@ -260,14 +261,23 @@ final class Supplies extends PowerGridComponent
     {
         return [
             Button::add('add')
-                ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
               </svg>')
-                ->class('outline-none inline-flex justify-center items-center group transition-all ease-in duration-150 focus:ring-2 focus:ring-offset-2 hover:shadow-sm disabled:opacity-80 disabled:cursor-not-allowed rounded gap-x-2 text-sm px-4 py-2     bg-white border text-slate-500 hover:bg-slate-50 ring-slate-200
-                dark:text-slate-200 dark:ring-slate-700 dark:border-slate-700
-                dark:bg-slate-700 dark:hover:bg-slate-600 dark:hover:ring-slate-600
-                dark:ring-offset-slate-800')
+                ->class('block bg-slate-50 text-slate-500 border border-slate-300 rounded py-1.5 px-3 leading-tight
+                focus:outline-none focus:bg-white focus:border-slate-600 dark:border-slate-500 dark:bg-slate-700
+                2xl:dark:placeholder-slate-300 dark:text-slate-200 dark:text-slate-300')
                 ->openModal('add-supply', []),
+
+   
+            Button::add('import')
+            ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>')
+            ->class('block bg-slate-50 text-slate-500 border border-slate-300 rounded py-1.5 px-3 leading-tight
+            focus:outline-none focus:bg-white focus:border-slate-600 dark:border-slate-500 dark:bg-slate-700
+            2xl:dark:placeholder-slate-300 dark:text-slate-200 dark:text-slate-300')
+            ->emit('import',[]),
 
             Button::add(''),
                 
