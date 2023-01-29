@@ -332,7 +332,6 @@
     @wireUiScripts
     @vite(['resources/js/app.js'])
     @powerGridScripts
-    
 </body>
 
 </html>
