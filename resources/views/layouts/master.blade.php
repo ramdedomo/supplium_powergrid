@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Supplium</title>
 
-    @wireUiScripts
-    @vite(['resources/js/app.js'])
+  
+
     @vite('resources/css/app.css')
     @livewireStyles
     @powerGridStyles
@@ -110,6 +110,8 @@
                     </div>
                 </a>
 
+        
+
                 <button class="rounded-lg md:hidden rounded-lg focus:outline-none focus:shadow-outline"
                     @click="open = !open">
                     <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
@@ -123,6 +125,20 @@
                 </button>
             </div>
 
+            <div class="mt-2 text-center py-2 font-bold bg-gray-100 border-l-4 border-amber-500">
+                @if(Auth::user()->department == 0)
+                    Administrator
+                @else
+                    @php
+                        foreach (App\Models\Department::all() as $department) {
+                        
+                            if($department->department == Auth::user()->department){
+                                echo $department->department_description;
+                            }
+                        }
+                    @endphp
+                @endif
+            </div>
 
             <nav :class="{ 'block': open, 'hidden': !open }" class="flex-grow md:block md:pb-0 md:overflow-y-auto mt-5">
                 <div class="flex flex-col w-full h-full px-4">
@@ -266,7 +282,7 @@
                             href="{{ route('logout') }}">Logout</a>
 
 
-                        <a href="#" onclick="$openModal('simpleModal')"
+                        <div href="#"
                             class="bg-gray-800 rounded-md p-2 text-white mb-4 flex space-x-3 border-b-4 border-amber-500 ">
                             <div
                                 class="bg-white text-gray-800 font-bold font-sans rounded-md w-10 flex items-center justify-center text-2xl">
@@ -289,7 +305,7 @@
 
                                 </span>
                             </div>
-                        </a>
+                        </div>
                     </div>
 
 
@@ -313,7 +329,10 @@
 
     @livewireScripts
     @livewire('livewire-ui-modal')
+    @wireUiScripts
+    @vite(['resources/js/app.js'])
     @powerGridScripts
+    
 </body>
 
 </html>

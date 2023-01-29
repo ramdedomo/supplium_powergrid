@@ -47,7 +47,7 @@
                                         </div>
     
                                         <div>
-                                            <x-button class="px-2" x-hold.click.repeat.200ms="count++" icon="Trash" label="Remove"/>
+                                            <x-button class="px-2" wire:click="remove({{$supply->id}})" icon="trash" label="Remove"/>
                                         </div>
                                     </div>
                                 </div>

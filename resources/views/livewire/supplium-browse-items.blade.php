@@ -21,17 +21,27 @@
         </div>
 
         <div class="flex justify-between bg-gray-100 rounded-md p-2">
-            <div>
-                <x-select placeholder="Sort" :options="['A-Z', 'Z-A']" wire:model.defer="model" />
+            <div class="flex gap-2">
+                <x-select placeholder="Type" :options="['Supplies', 'Equipments']" wire:model="type" />
+                <x-select  placeholder="Sort" :options="['A-Z', 'Z-A', 'Low - Stocks', 'High - Stocks']" wire:model="sort" />
             </div>
             <div>
-                <x-input class="" placeholder="Search" />
+                <x-input wire:model="search" class="" placeholder="Search" />
             </div>
         </div>
-      
+
+        @if($supplies->isEmpty())
+            <div class="mt-4 text-center p-5 rounded-md border-b-4 border-gray-800 bg-gray-100 text-gray-400">
+                Empty
+            </div>
+        @endif
+
         <div class="grid grid-cols-4 gap-4 mt-4">
+ 
+ 
+
             @foreach ($supplies as $supply)
-                <a href="#"
+                <a 
                     wire:click="$emit('openModal', 'supply-order', {{ json_encode(['supply' => $supply->id]) }})"
                     class="transition bg-cover bg-center bg-no-repeat ease-in-out hover:scale-105 relative block overflow-hidden rounded-xl border-b-4"
                     style="border-color: {{ $supply->supply_color }}; background-image: url({{Storage::url($supply->supply_photo)}})">
@@ -54,7 +64,9 @@
                     </div>
                 </a>
             @endforeach
+
         </div>
+
     </div>
 
 

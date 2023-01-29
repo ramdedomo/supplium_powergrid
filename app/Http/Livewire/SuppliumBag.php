@@ -22,6 +22,10 @@ class SuppliumBag extends Component
 
     protected $listeners = ['bagUpdated' => '$refresh'];
 
+    public function remove($id){
+        Bag::where('supply_id', $id)->delete();
+    }
+
 
     public function sendrequest(){
 

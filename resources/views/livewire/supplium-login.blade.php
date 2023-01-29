@@ -16,10 +16,12 @@
             <form wire:submit.prevent="submit">
                 
                 @if (Session::has('message'))
-                <div class="flex mb-2 items-start gap-x-3 rounded-lg border dark:border-0 shadow-soft bg-amber-100 dark:bg-secondary-700 p-3">
-                    <x-icon name="information-circle" class="w-6 h-6" /> {{ Session::get('message') }}
+                <div class="flex mb-2 justify-center items-start gap-x-3 rounded-lg border dark:border-0 shadow-soft bg-gray-100  p-3">
+                    {{ Session::get('message') }}
                 </div>
                 @endif
+              
+            <x-errors class="mb-2" />
 
                 
                 <div class="bg-gray-100 p-3 rounded-lg space-y-3">

@@ -73,7 +73,9 @@ final class Receipts extends PowerGridComponent
         ->select([
             'receipt.*',
             'status.*',
-        ])->where('receipt.user_id', Auth::user()->id);
+        ])
+        ->where('receipt.user_id', Auth::user()->id)
+        ->orderBy('receipt.created_at', 'DESC');
     }
 
     /*

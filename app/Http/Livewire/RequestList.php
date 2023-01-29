@@ -73,6 +73,7 @@ final class RequestList extends PowerGridComponent
                 $categories->on('receipt.supply_status', '=', 'status.status');
             })
             ->where('receipt.is_supply', 1)
+            ->orderBy('receipt.created_at', 'DESC')
             ->select([
                 'receipt.*',
                 'status.*',
@@ -87,6 +88,7 @@ final class RequestList extends PowerGridComponent
             })
             ->where('user.department', Auth::user()->department)
             ->where('receipt.is_supply', 0)
+            ->orderBy('receipt.created_at', 'DESC')
             ->select([
                 'receipt.*',
                 'status.*',

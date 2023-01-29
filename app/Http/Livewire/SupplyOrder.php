@@ -244,27 +244,29 @@ class SupplyOrder extends ModalComponent
 
         $this->emit('itemRequested');
         $this->closeModal();
-
-        $this->notification()->confirm([
-            'title'       => 'Request Placed!',
-            'description' => 'Your Request is Succesfully Placed!',
-            'accept'      => [
-                'label'  => 'Check Requested Items',
-                'method' => 'check',
-            ],
-            'reject' => [
-                'label'  => 'Cancel',
-            ],
-            'params'      => 'Saved',
-            'icon'        => 'success',
-            'iconColor'   => 'text-amber-500'
-        ]);
-
-    }
-
-    public function check(){
+        
         return redirect('myrequests');
+
+        // $this->notification()->confirm([
+        //     'title'       => 'Request Placed!',
+        //     'description' => 'Your Request is Succesfully Placed!',
+        //     'accept'      => [
+        //         'label'  => 'Check Requested Items',
+        //         'method' => 'check',
+        //     ],
+        //     'reject' => [
+        //         'label'  => 'Cancel',
+        //     ],
+        //     'params'      => 'Saved',
+        //     'icon'        => 'success',
+        //     'iconColor'   => 'text-amber-500'
+        // ]);
+
     }
+
+    // public function check(){
+    //     return redirect('myrequests');
+    // }
 
     public function request(){
         $this->validate();
@@ -283,29 +285,30 @@ class SupplyOrder extends ModalComponent
             ],
         ]);
 
+
     }
 
-    public function bag(){
-        return redirect('bag');
-    }
+    // public function bag(){
+    //     return redirect()->to('/bag');
+    // }
 
     public function cart(){
         $this->validate();
 
-        $this->notification()->confirm([
-            'title'       => 'Added to Bag!',
-            'description' => 'Item added to Bag. Check your bag.',
-            'accept'      => [
-                'label'  => 'Check Bag',
-                'method' => 'bag',
-            ],
-            'reject' => [
-                'label'  => 'Cancel',
-            ],
-            'params'      => 'Saved',
-            'icon'        => 'success',
-            'iconColor'   => 'text-amber-500'
-        ]);
+        // $this->notification()->confirm([
+        //     'title'       => 'Added to Bag!',
+        //     'description' => 'Item added to Bag. Check your bag.',
+        //     'accept'      => [
+        //         'label'  => 'Check Bag',
+        //         'method' => 'bag',
+        //     ],
+        //     'reject' => [
+        //         'label'  => 'Cancel',
+        //     ],
+        //     'params'      => 'Saved',
+        //     'icon'        => 'success',
+        //     'iconColor'   => 'text-amber-500'
+        // ]);
 
         $isexists = Bag::where('supply_id', $this->supply)->where('user_id', Auth::user()->id)->exists();
 
@@ -326,9 +329,10 @@ class SupplyOrder extends ModalComponent
                 'supply_id' => $this->supply
             ]);
         }
+        
 
         $this->closeModal();
-
+        return redirect('bag');
         
     }
 

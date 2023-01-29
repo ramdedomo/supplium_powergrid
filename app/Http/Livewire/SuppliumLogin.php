@@ -34,9 +34,8 @@ class SuppliumLogin extends Component
             return redirect('dashboard');
         }
         
-        Session::flash('message', "User not found");
+        Session::flash('message', "user not found, please try again.");
         return redirect()->back();
-
     }
 
     public function render()

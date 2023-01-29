@@ -19,53 +19,55 @@ class CheckRoles
     public function handle(Request $request, Closure $next)
     {
 
-        if(Auth::user()->user_type == 1){
+        if(!is_null(Auth::user())){
 
-            if(
-                $request->route()->uri() == "list" ||  
-                $request->route()->uri() == "myrequests"
-                ){
+            if(Auth::user()->user_type == 1){
+
+                if(
+                    $request->route()->uri() == "list" ||  
+                    $request->route()->uri() == "myrequests"
+                    ){
+        
+                    return redirect()->back();
+                }
     
-                return redirect()->back();
-            }
-
-        }elseif(Auth::user()->user_type == 2){
-
-            if(
-                // $request->route()->uri() == "users" ||  
-                $request->route()->uri() == "items"
-                ){
+            }elseif(Auth::user()->user_type == 2){
     
-                return redirect()->back();
-            }
-
-        }elseif(Auth::user()->user_type == 3){
-
-            if(
-                // $request->route()->uri() == "users" ||  
-                $request->route()->uri() == "items"
+                if(
+                    // $request->route()->uri() == "users" ||  
+                    $request->route()->uri() == "items"
+                    ){
+        
+                    return redirect()->back();
+                }
+    
+            }elseif(Auth::user()->user_type == 3){
+    
+                if(
+                    // $request->route()->uri() == "users" ||  
+                    $request->route()->uri() == "items"
+                    ){
+        
+                        return redirect()->back();
+                }
+    
+            }elseif(Auth::user()->user_type == 4){
+                
+              if(
+                $request->route()->uri() == "users" ||  
+                $request->route()->uri() == "items" ||
+                $request->route()->uri() == "requests"
                 ){
     
                     return redirect()->back();
+              }
+    
+            }else{
+                return redirect('/');
             }
-
-        }elseif(Auth::user()->user_type == 4){
-            
-          if(
-            $request->route()->uri() == "users" ||  
-            $request->route()->uri() == "items" ||
-            $request->route()->uri() == "requests"
-            ){
-
-                return redirect()->back();
-          }
-
         }else{
             return redirect('/');
         }
-
-
-
 
         return $next($request);
 
