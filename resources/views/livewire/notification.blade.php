@@ -168,7 +168,7 @@
                 <div class=" inline-flex items-center justify-between w-full">
                     <div class="inline-flex items-center">
                         <h3 class="text-sm font-semibold flex items-center gap-1">
-                            <x-icon name="Inbox" class="w-5 h-5" />Approval <span class="font-bold">#{{$notification->receipt_id}}</span>
+                            <x-icon name="inbox" class="w-5 h-5" />Approval <span class="font-bold">#{{$notification->receipt_id}}</span>
                         </h3>
                     </div>
                     <p class="text-xs text-gray-500">
@@ -188,7 +188,7 @@
                 <div class=" inline-flex items-center justify-between w-full">
                     <div class="inline-flex items-center">
                         <h3 class="text-sm font-semibold flex items-center gap-1">
-                            <x-icon name="Inbox" class="w-5 h-5" />Approval <span class="font-bold">#{{$notification->receipt_id}}</span>
+                            <x-icon name="inbox" class="w-5 h-5" />Approval <span class="font-bold">#{{$notification->receipt_id}}</span>
                         </h3>
                     </div>
                     <p class="text-xs text-gray-500">
@@ -208,7 +208,7 @@
                 <div class=" inline-flex items-center justify-between w-full">
                     <div class="inline-flex items-center">
                         <h3 class="text-sm font-semibold flex items-center gap-1">
-                            <x-icon name="Inbox" class="w-5 h-5" />Approval <span class="font-bold">#{{$notification->receipt_id}}</span>
+                            <x-icon name="inbox" class="w-5 h-5" />Approval <span class="font-bold">#{{$notification->receipt_id}}</span>
                         </h3>
                     </div>
                     <p class="text-xs text-gray-500">
