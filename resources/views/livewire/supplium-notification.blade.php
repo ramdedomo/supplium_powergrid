@@ -21,7 +21,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -43,7 +43,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -65,7 +65,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -87,7 +87,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -109,7 +109,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -131,7 +131,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -153,7 +153,7 @@
                                     </h3>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    5 min ago
+                                    {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                                 </p>
                             </div>
                             <p class="mt-1 text-sm">
@@ -174,7 +174,7 @@
                                 </h3>
                             </div>
                             <p class="text-xs text-gray-500">
-                                5 min ago
+                                {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                             </p>
                         </div>
                         <p class="mt-1 text-sm">
@@ -194,7 +194,7 @@
                                 </h3>
                             </div>
                             <p class="text-xs text-gray-500">
-                                5 min ago
+                                {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                             </p>
                         </div>
                         <p class="mt-1 text-sm">
@@ -214,7 +214,7 @@
                                 </h3>
                             </div>
                             <p class="text-xs text-gray-500">
-                                5 min ago
+                                {{Carbon\Carbon::parse($notification->timecreated)->diffForHumans()}}
                             </p>
                         </div>
                         <p class="mt-1 text-sm">

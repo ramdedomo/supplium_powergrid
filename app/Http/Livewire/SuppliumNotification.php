@@ -18,6 +18,7 @@ class SuppliumNotification extends Component
         if($this->user->user_type == 1){
             $notifications = Notifications::join('user', 'user.id', '=', 'notifications.user_id')
             ->whereNotIn('notifications.notification_type', [100, 102, 0, 1, 2, 3, 4, 5, 6])
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             // ->where('notifications.is_supply', 1)
             ->orderBy('notifications.created_at', 'DESC')
             ->paginate(7);
@@ -26,6 +27,7 @@ class SuppliumNotification extends Component
             ->where('user.department', Auth::user()->department)
             // ->where('notifications.user_id', $this->user->id)
             ->whereNotIn('notifications.notification_type', [100, 103])
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             // ->where('notifications.is_supply', 0)
             ->orderBy('notifications.created_at', 'DESC')
             ->paginate(7);
@@ -34,6 +36,7 @@ class SuppliumNotification extends Component
             ->where('user.department', Auth::user()->department)
             ->whereNotIn('notifications.notification_type', [102, 103])
             // ->where('notifications.is_supply', 0)
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->orderBy('notifications.created_at', 'DESC')
             ->paginate(7);
         }else{
@@ -41,6 +44,7 @@ class SuppliumNotification extends Component
             ->where('user.department', Auth::user()->department)
             ->where('user.id', Auth::user()->id)
             ->whereNotIn('notifications.notification_type', [100, 102, 103])
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->orderBy('notifications.created_at', 'DESC')
             ->paginate(7);
         }

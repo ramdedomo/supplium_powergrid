@@ -20,6 +20,7 @@ class Notification extends Component
             ->whereNotIn('notifications.notification_type', [100, 102, 0, 1, 2, 3, 4, 5, 6])
             // ->where('notifications.is_supply', 1)
             ->orderBy('notifications.created_at', 'DESC')
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->limit(10)
             ->get();
         }elseif($this->user->user_type == 2){
@@ -29,6 +30,7 @@ class Notification extends Component
             ->whereNotIn('notifications.notification_type', [100, 103])
             // ->where('notifications.is_supply', 0)
             ->orderBy('notifications.created_at', 'DESC')
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->limit(10)
             ->get();
         }elseif($this->user->user_type == 3){
@@ -37,6 +39,7 @@ class Notification extends Component
             ->whereNotIn('notifications.notification_type', [102, 103])
             // ->where('notifications.is_supply', 0)
             ->orderBy('notifications.created_at', 'DESC')
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->limit(10)
             ->get();
          
@@ -46,6 +49,7 @@ class Notification extends Component
             ->where('user.id', Auth::user()->id)
             ->whereNotIn('notifications.notification_type', [100, 102, 103])
             ->orderBy('notifications.created_at', 'DESC')
+            ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->limit(10)
             ->get();
         }
