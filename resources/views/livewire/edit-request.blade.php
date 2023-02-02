@@ -156,6 +156,13 @@
        
     @else
 
+        @if(Auth::user()->user_type == 5 && $receipt->supply_status == 2)
+        <div class="my-3">
+            <x-button wire:click="accept" amber class="w-full mb-2" label="Accept Request (CED)" />
+            <x-button wire:click="cancel" class="w-full mb-2" outline label="Cancel" />
+        </div>
+        @endif
+
         @if(Auth::user()->user_type == 2 && $receipt->supply_status == 1)
         <div class="my-3">
             <x-button wire:click="accept" amber class="w-full mb-2" label="Accept Request (Dean)" />
@@ -240,6 +247,14 @@
             </div>
             @endif
 
+            @if(!is_null($receipt->ced_at))
+            <div class="flex justify-between">
+                CED (Approved): 
+                <span class="font-bold"> {{ date_format(Carbon\Carbon::parse($receipt->ced_at), 'M/d h:i A') }}</span>
+            </div>
+            @endif
+
+
             @if(!is_null($receipt->done_at))
             <div class="flex justify-between">
                 Request Done: 
@@ -271,12 +286,13 @@
         @if($receipt->supply_status == 7)
         <div class="grid-cols-1 text-center text-sm bg-red-500 text-white px-2 py-1 rounded-full"> Canceled</div>
         @else
-        <div class="grid grid-cols-5 mb-3 gap-6">
+        <div class="grid grid-cols-6 mb-3 gap-6">
             <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full"> Placed</div>
             {{-- <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->accepted_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Accepted</div> --}}
             <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->chair_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Chair</div>
             <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Dean</div>
-            <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Pick Up</div>
+            <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">CED</div>
+            <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Pick Up</div>
             <div class="grid-cols-1 text-center text-sm @if(is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Done</div>
         </div>
         @endif

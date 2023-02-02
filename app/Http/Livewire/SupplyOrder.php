@@ -15,6 +15,7 @@ use WireUi\Traits\Actions;
 use Illuminate\Support\Facades\Route;
 use Request;
 use Carbon\Carbon;
+use App\Models\Department;
 
 class SupplyOrder extends ModalComponent
 {
@@ -41,54 +42,99 @@ class SupplyOrder extends ModalComponent
     }
 
     public function request_confirm(){
-        $receipt = rand(00000000,99999999);
+    
 
         if($this->issupply == 0){
 
-            Requests::create([
-                'supply_id' => $this->supply,
-                'id' => $receipt,
-                'quantity' => $this->quantity,
-            ]);
-    
             switch (Auth::user()->user_type) {
                 case 4:
-                    Receipt::create([
-                        'user_id' => Auth::user()->id,
-                        'id' => $receipt,
-                        'supply_status' => 0,
-                        'is_supply' => $this->issupply
-                    ]);
 
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt,
-                        'notification_type' => 100,
-                        'is_supply' => 0
-                    ]);
+                    $isnonteach = Department::find(Auth::user()->department)->nonteaching;
+                    if($isnonteach == 0){
+                        $receipt = Receipt::create([
+                            'user_id' => Auth::user()->id,
+                            'supply_status' => 0,
+                            'is_supply' => $this->issupply
+                        ])->id;
+      
+                        Requests::create([
+                            'supply_id' => $this->supply,
+                            'receipt_id' => $receipt,
+                            'quantity' => $this->quantity,
+                        ]);
+    
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt,
+                            'notification_type' => 100,
+                            'is_supply' => 0
+                        ]);
+    
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt,
+                            'notification_type' => 0,
+                            'is_supply' => 0
+                        ]);   
+                        
+                        Messages::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt,
+                            'message_type' => 0
+                        ]);
+                    }else{
+                        $receipt = Receipt::create([
+                            'user_id' => Auth::user()->id,
+                            'supply_status' => 2,
+                            'chair_at' => Carbon::now(),
+                            'dean_at' => Carbon::now(),
+                            'is_supply' => $this->issupply
+                        ])->id;
+      
+                        Requests::create([
+                            'supply_id' => $this->supply,
+                            'receipt_id' => $receipt,
+                            'quantity' => $this->quantity,
+                        ]);
+    
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt,
+                            'notification_type' => 105,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt,
+                            'notification_type' => 0,
+                            'is_supply' => 0
+                        ]);    
+    
+                        Messages::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt,
+                            'message_type' => 0
+                        ]);
+                    }
 
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt,
-                        'notification_type' => 0,
-                        'is_supply' => 0
-                    ]);   
-                    
-                    Messages::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt,
-                        'message_type' => 0
-                    ]);
   
                     break;
                 case 3:
-                    Receipt::create([
+
+                    $receipt = Receipt::create([
                         'user_id' => Auth::user()->id,
-                        'id' => $receipt,
                         'supply_status' => 1,
                         'chair_at' => Carbon::now(),
                         'is_supply' => $this->issupply
+                    ])->id;
+  
+                    Requests::create([
+                        'supply_id' => $this->supply,
+                        'receipt_id' => $receipt,
+                        'quantity' => $this->quantity,
                     ]);
+
 
                     Notifications::create([
                         'user_id' => Auth::user()->id,
@@ -126,14 +172,26 @@ class SupplyOrder extends ModalComponent
         
                     break;
                 case 2:
-                    Receipt::create([
+                    $receipt = Receipt::create([
                         'user_id' => Auth::user()->id,
-                        'id' => $receipt,
-                        'supply_status' => 4,
+                        'supply_status' => 2,
                         'chair_at' => Carbon::now(),
                         'dean_at' => Carbon::now(),
                         'is_supply' => $this->issupply
+                    ])->id;
+  
+                    Requests::create([
+                        'supply_id' => $this->supply,
+                        'receipt_id' => $receipt,
+                        'quantity' => $this->quantity,
                     ]);
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'notification_type' => 105,
+                        'is_supply' => 0
+                    ]);   
 
                     Notifications::create([
                         'user_id' => Auth::user()->id,
@@ -156,19 +214,19 @@ class SupplyOrder extends ModalComponent
                         'is_supply' => 0
                     ]);   
 
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt,
-                        'notification_type' => 3,
-                        'is_supply' => 0
-                    ]);   
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'notification_type' => 3,
+                    //     'is_supply' => 0
+                    // ]);   
 
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt,
-                        'notification_type' => 4,
-                        'is_supply' => 0
-                    ]);   
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'notification_type' => 4,
+                    //     'is_supply' => 0
+                    // ]);   
 
                     Messages::create([
                         'user_id' => Auth::user()->id,
@@ -188,11 +246,95 @@ class SupplyOrder extends ModalComponent
                         'message_type' => 2
                     ]);
 
-                    Messages::create([
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'message_type' => 3
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'message_type' => 4
+                    // ]);
+        
+                    break;
+
+                case 5: 
+
+                    $receipt = Receipt::create([
+                        'user_id' => Auth::user()->id,
+                        'supply_status' => 4,
+                        'chair_at' => Carbon::now(),
+                        'dean_at' => Carbon::now(),
+                        'ced_at' => Carbon::now(),
+                        'is_supply' => $this->issupply
+                    ])->id;
+  
+                    Requests::create([
+                        'supply_id' => $this->supply,
+                        'receipt_id' => $receipt,
+                        'quantity' => $this->quantity,
+                    ]);
+                    
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'notification_type' => 0,
+                    //     'is_supply' => 0
+                    // ]);    
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'notification_type' => 1,
+                    //     'is_supply' => 0
+                    // ]);
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'notification_type' => 2,
+                    //     'is_supply' => 0
+                    // ]);   
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'notification_type' => 8,
+                    //     'is_supply' => 0
+                    // ]);   
+
+                    Notifications::create([
                         'user_id' => Auth::user()->id,
                         'receipt_id' => $receipt,
-                        'message_type' => 3
-                    ]);
+                        'notification_type' => 4,
+                        'is_supply' => 0
+                    ]);   
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'message_type' => 0
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'message_type' => 1
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'message_type' => 2
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt,
+                    //     'message_type' => 8
+                    // ]);
 
                     Messages::create([
                         'user_id' => Auth::user()->id,
@@ -205,17 +347,17 @@ class SupplyOrder extends ModalComponent
     
         }else{
 
-            Requests::create([
-                'supply_id' => $this->supply,
-                'id' => $receipt,
-                'quantity' => $this->quantity,
-            ]);
-
-            Receipt::create([
+ 
+            $receipt = Receipt::create([
                 'user_id' => Auth::user()->id,
-                'id' => $receipt,
                 'supply_status' => 0,
                 'is_supply' => $this->issupply
+            ])->id;
+
+            Requests::create([
+                'receipt_id' => $receipt,
+                'supply_id' => $this->supply,
+                'quantity' => $this->quantity,
             ]);
 
             Notifications::create([

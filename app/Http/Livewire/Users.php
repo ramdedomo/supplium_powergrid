@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
+use App\Models\Department;
 use App\Models\UserType;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,16 +79,23 @@ final class Users extends PowerGridComponent
             ->join('user_type', function ($categories) {
                 $categories->on('user.user_type', '=', 'user_type.user_type');
             })
+            ->join('department_type', function ($categories) {
+                $categories->on('user.department', '=', 'department_type.department');
+            })
             ->where('user.id', '!=', Auth::user()->id)
             ->where('user.user_type', '!=', 1)
             ->select([
                 'user.*',
                 'user_type.role as role',
+                'department_type.department_description as department',
             ]);
         }else{
             return User::query()
             ->join('user_type', function ($categories) {
                 $categories->on('user.user_type', '=', 'user_type.user_type');
+            })
+            ->join('department_type', function ($categories) {
+                $categories->on('user.department', '=', 'department_type.department');
             })
             ->where('user.user_type', '!=', 1)
             ->where('user.id', '!=', Auth::user()->id)
@@ -95,6 +103,7 @@ final class Users extends PowerGridComponent
             ->select([
                 'user.*',
                 'user_type.role as role',
+                'department_type.department_description as department',
             ]);
         }
 
@@ -138,6 +147,7 @@ final class Users extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('role')
             ->addColumn('email')
+            ->addColumn('department')
 
            /** Example of custom column using a closure **/
             ->addColumn('email_lower', function (User $model) {
@@ -170,6 +180,15 @@ final class Users extends PowerGridComponent
     public function columns(): array
     {
         return [
+            
+            Column::make('DEPARTMENT', 'department')
+            ->makeInputSelect(
+                Department::all(),
+                'department_description', //role from usertype
+                'department_description' //role from select all
+            )
+            ->searchable(),
+
             Column::make('ROLE', 'role')
                 ->makeInputSelect(
                     UserType::all(),
@@ -193,22 +212,16 @@ final class Users extends PowerGridComponent
                 ->hidden()
                 ->searchable(),
 
-            Column::make('UPDATED AT', 'updated_at')
-                ->makeInputDatePicker('updated_at')
-                ->sortable()
-                ->searchable(),
+            // Column::make('UPDATED AT', 'updated_at')
+            //     ->makeInputDatePicker('updated_at')
+            //     ->sortable()
+            //     ->searchable(),
 
-            Column::make('CREATED AT', 'created_at')
-                ->makeInputDatePicker('created_at')
-                ->sortable()
-                ->searchable(),
-
-
-
- 
-
-        ]
-;
+            // Column::make('CREATED AT', 'created_at')
+            //     ->makeInputDatePicker('created_at')
+            //     ->sortable()
+            //     ->searchable(),
+        ];
     }
 
     public function header(): array

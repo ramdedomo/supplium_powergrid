@@ -15,7 +15,7 @@
         </x-card>
     </x-modal>
 
-    <div>
+    <div class="h-full">
         <div class="p-2 bg-gray-800 rounded-lg mb-3 flex items-center font-bold text-white border-b-4 border-amber-500">
             <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
         </div>
@@ -37,7 +37,6 @@
         @endif
 
         <div class="grid grid-cols-4 gap-4 mt-4">
- 
  
 
             @foreach ($supplies as $supply)
@@ -65,6 +64,10 @@
                 </a>
             @endforeach
 
+        </div>
+
+        <div class="mt-5">
+            {{ $supplies->links() }}
         </div>
 
     </div>

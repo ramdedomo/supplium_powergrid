@@ -7,6 +7,8 @@ use App\Models\Supply;
 use App\Models\Bag;
 use App\Models\User;
 use App\Models\Receipt;
+use App\Models\Requests;
+
 use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\Actions;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +16,7 @@ use Request;
 use Carbon\Carbon;
 use App\Models\Notifications;
 use App\Models\Messages;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ViewRequest extends ModalComponent
 {
@@ -33,6 +36,11 @@ class ViewRequest extends ModalComponent
             'supply_status' => 5,
             'done_at' => Carbon::now()
         ]);
+
+        $supplies = Requests::where('receipt_id', $this->request)->get();
+        foreach($supplies as $supply){
+            Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
+        }
 
         $exists = Notifications::where('receipt_id', $this->request)->first();
         
@@ -59,6 +67,7 @@ class ViewRequest extends ModalComponent
         $this->emit('itemRequested');
         $this->emit('itemUpdated');
     }
+
 
     public function done(){
         
@@ -108,6 +117,8 @@ class ViewRequest extends ModalComponent
         $this->emit('itemRequested');
         $this->emit('itemUpdated');
     }
+    
+
 
     public function cancel(){
 
@@ -129,11 +140,13 @@ class ViewRequest extends ModalComponent
     public function mount($request){
   
         $this->request = $request;
+
         $this->receipt = Receipt::where('receipt.id', $request)
         ->join('status', 'receipt.supply_status', '=', 'status.status')
         ->first();
+
         $this->requests = Receipt::where('receipt.id', $request)
-        ->join('requests', 'receipt.id', '=', 'requests.id')
+        ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
         ->get();
 
         $count = 0;
@@ -143,9 +156,47 @@ class ViewRequest extends ModalComponent
             $count++;
         }
 
-        $this->user = User::find($this->receipt->user_id);
+        $this->user = User::where('id', $this->receipt->user_id)->first();
     }
 
+    public function getreceipt(){
+        $this->receipt = Receipt::where('receipt.id', $this->request)
+        ->join('status', 'receipt.supply_status', '=', 'status.status')
+        ->first();
+
+        $this->requests = Receipt::where('receipt.id', $this->request)
+        ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+        ->get();
+
+        $count = 0;
+        foreach($this->requests as $item){
+            $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
+            $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
+            $count++;
+        }
+
+        $userdetails = User::where('id', $this->receipt->user_id)
+        ->join('department_type', 'user.department', '=', 'department_type.department')
+        ->join('user_type', 'user.user_type', '=', 'user_type.user_type')
+        ->select('user.*', 'user_type.role as usertype', 'department_type.department_description as userdepartment')
+        ->first();
+
+        $pdfContent = PDF::loadView('pdf', [
+            'requests' => $this->requests,
+            'receipt_id' => $this->request,
+            'user_details' => $userdetails
+        ])->output();
+
+        return response()->streamDownload(
+            fn () => print($pdfContent),
+            "#".$this->request."_receipt.pdf"
+        );
+    }
+   
+    public function DownloadNotes() { 
+  
+
+    }
 
     public function send_message(){
         $this->validate([

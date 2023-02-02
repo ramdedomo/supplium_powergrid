@@ -16,5 +16,5 @@ class Requests extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id', 'supply_id', 'created_at', 'updated_at', 'quantity'];
+    protected $fillable = ['id', 'supply_id', 'created_at', 'updated_at', 'quantity', 'receipt_id'];
 }

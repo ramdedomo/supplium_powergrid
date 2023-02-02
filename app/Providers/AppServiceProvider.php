@@ -32,6 +32,9 @@ class AppServiceProvider extends ServiceProvider
         {
             URL::forceScheme('https');
         }
+        
+        date_default_timezone_set('Asia/Manila');
+
         View::composer('*', function ($view) {
             $view->with('user_info', Auth::user());
         });

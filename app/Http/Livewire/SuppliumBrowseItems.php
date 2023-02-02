@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Supply;
+use Livewire\WithPagination;
 
 class SuppliumBrowseItems extends Component
 {
+    use WithPagination;
+    
     public $search;
     public $sort;
     public $type;
@@ -41,7 +44,7 @@ class SuppliumBrowseItems extends Component
         })
         ->join('supply_type', 'supply.supply_type', '=', 'supply_type.supply_type')
         ->select('supply.*', 'supply_type.supply_name as supplyname')
-        ->get();
+        ->paginate(12);
         
 
 

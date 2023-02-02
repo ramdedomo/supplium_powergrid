@@ -34,7 +34,7 @@ class CheckRoles
             }elseif(Auth::user()->user_type == 2){
     
                 if(
-                    // $request->route()->uri() == "users" ||  
+                    $request->route()->uri() == "departments" ||  
                     $request->route()->uri() == "items"
                     ){
         
@@ -44,6 +44,7 @@ class CheckRoles
             }elseif(Auth::user()->user_type == 3){
     
                 if(
+                    $request->route()->uri() == "departments" ||  
                     // $request->route()->uri() == "users" ||  
                     $request->route()->uri() == "items"
                     ){
@@ -54,6 +55,7 @@ class CheckRoles
             }elseif(Auth::user()->user_type == 4){
                 
               if(
+                $request->route()->uri() == "departments" ||  
                 $request->route()->uri() == "dashboard" ||  
                 $request->route()->uri() == "users" ||  
                 $request->route()->uri() == "items" ||
@@ -63,7 +65,18 @@ class CheckRoles
                     return redirect()->back();
               }
     
-            }else{
+            }elseif(Auth::user()->user_type == 5){
+                
+                if(
+                    $request->route()->uri() == "departments" ||  
+                    $request->route()->uri() == "users" ||  
+                    $request->route()->uri() == "items"
+                  ){
+      
+                      return redirect()->back();
+                }
+      
+              }else{
                 return redirect('/');
             }
         }else{

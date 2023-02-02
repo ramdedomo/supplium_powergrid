@@ -2,19 +2,18 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Receipt;
-use App\Models\Status;
+use App\Models\Department;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
-use Illuminate\Support\Facades\Auth;
 
-final class Receipts extends PowerGridComponent
+final class Departments extends PowerGridComponent
 {
     use ActionButton;
-    //
+    public string $primaryKey = 'department';
+    public string $sortField = 'department';
     /*
     |--------------------------------------------------------------------------
     |  Features Setup
@@ -22,6 +21,7 @@ final class Receipts extends PowerGridComponent
     | Setup Table's general features
     |
     */
+
 
     protected function getListeners()
     {
@@ -35,6 +35,7 @@ final class Receipts extends PowerGridComponent
             'itemUpdated' => '$refresh',
         ];
     }
+
 
     public function setUp(): array
     {
@@ -62,20 +63,15 @@ final class Receipts extends PowerGridComponent
     /**
     * PowerGrid datasource.
     *
-    * @return Builder<\App\Models\Receipt>
+    * @return Builder<\App\Models\Department>
     */
     public function datasource(): Builder
     {
-        return Receipt::query()
-        ->join('status', function ($categories) {
-            $categories->on('receipt.supply_status', '=', 'status.status');
-        })
-        ->select([
-            'receipt.*',
-            'status.*',
-        ])
-        ->where('receipt.user_id', Auth::user()->id)
-        ->orderBy('receipt.created_at', 'DESC');
+
+        return Department::query()
+        ->where('department', '>', 0);
+
+
     }
 
     /*
@@ -110,26 +106,10 @@ final class Receipts extends PowerGridComponent
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
-            ->addColumn('id')
-            ->addColumn('created_at')
-
-           /** Example of custom column using a closure **/
-            ->addColumn('created_at_lower', function (Receipt $model) {
-                return strtolower(e($model->created_at));
-            })
-
-            
-            ->addColumn('created_at_formatted', function (Receipt $model) {
-                return date_format(Carbon::parse($model->created_at), 'M/d h:i A');
-            })
-            ->addColumn('updated_at_formatted', function (Receipt $model) {
-                return date_format(Carbon::parse($model->updated_at), 'M/d h:i A');
-            })
-
-            ->addColumn('updated_at')
-            ->addColumn('supply_status')
-            ->addColumn('created_at')
-            ->addColumn('updated_at');
+            // ->addColumn('department')
+            // ->addColumn('department')
+            ->addColumn('department_description')
+            ->addColumn('department_short');
     }
 
     /*
@@ -149,24 +129,20 @@ final class Receipts extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('RECEIPT ID', 'id'),
+            // Column::make('DEPARTMENT', 'department')
+            //     ->makeInputRange(),
 
-            Column::make('PLACED', 'created_at_formatted')
-            ->makeInputDatePicker('created_at')
-            ->sortable()
-            ->searchable(),
+            // Column::make('DEPARTMENT', 'department')
+            //     ->makeInputRange(),
 
-            Column::make('LAST UPDATED', 'updated_at_formatted')
-            ->makeInputDatePicker('updated_at')
-            ->sortable()
-            ->searchable(),
+            Column::make('DEPARTMENT DESCRIPTION', 'department_description')
+                ->sortable()
+                ->searchable(),
 
-            Column::make('SUPPLY STATUS', 'status_desc')
-            ->makeInputSelect(
-                Status::all(),
-                'status_desc', //role from usertype
-                'status_desc' //role from select all
-            ),
+            Column::make('DEPARTMENT SHORT', 'department_short')
+                ->sortable()
+                ->searchable(),
+
         ]
 ;
     }
@@ -180,35 +156,48 @@ final class Receipts extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Receipt Action Buttons.
+     * PowerGrid Department Action Buttons.
      *
      * @return array<int, Button>
      */
 
-
+    
     public function actions(): array
     {
        return [
-
-        Button::add('edit')
-        ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-      </svg>')
-        ->class('outline-none inline-flex justify-center items-center group transition-all ease-in duration-150 focus:ring-2 focus:ring-offset-2 hover:shadow-sm disabled:opacity-80 disabled:cursor-not-allowed rounded gap-x-2 text-sm px-2 py-2 text-slate-500 hover:bg-slate-100 ring-slate-200 dark:ring-slate-600 dark:border-slate-500
-        dark:ring-offset-slate-800 dark:text-slate-400 dark:hover:bg-slate-700')
-        ->openModal('view-request', ["request" => 'id']),
-
-        //    Button::make('edit', 'Edit')
-        //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-        //        ->route('receipt.edit', ['receipt' => 'id']),
+                 Button::add('edit')
+                ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+              </svg>')
+                ->class('outline-none inline-flex justify-center items-center group transition-all ease-in duration-150 focus:ring-2 focus:ring-offset-2 hover:shadow-sm disabled:opacity-80 disabled:cursor-not-allowed rounded gap-x-2 text-sm px-2 py-2 text-slate-500 hover:bg-slate-100 ring-slate-200 dark:ring-slate-600 dark:border-slate-500
+                dark:ring-offset-slate-800 dark:text-slate-400 dark:hover:bg-slate-700')
+                ->openModal('edit-department', ["department" => 'department']),
 
         //    Button::make('destroy', 'Delete')
         //        ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-        //        ->route('receipt.destroy', ['receipt' => 'id'])
+        //        ->route('department.destroy', ['department' => 'id'])
         //        ->method('delete')
         ];
     }
- 
+
+    public function header(): array
+    {
+        return [
+            Button::add('add')
+                ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+              </svg>')
+                ->class('block bg-slate-50 text-slate-500 border border-slate-300 rounded py-1.5 px-3 leading-tight
+                focus:outline-none focus:bg-white focus:border-slate-600 dark:border-slate-500 dark:bg-slate-700
+                2xl:dark:placeholder-slate-300 dark:text-slate-200 dark:text-slate-300')
+                ->openModal('add-department', []),
+
+            Button::add(''),
+                
+            //...
+        ];
+    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -219,7 +208,7 @@ final class Receipts extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Receipt Action Rules.
+     * PowerGrid Department Action Rules.
      *
      * @return array<int, RuleActions>
      */
@@ -231,7 +220,7 @@ final class Receipts extends PowerGridComponent
 
            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($receipt) => $receipt->id === 1)
+                ->when(fn($department) => $department->id === 1)
                 ->hide(),
         ];
     }

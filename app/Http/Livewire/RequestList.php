@@ -4,12 +4,14 @@ namespace App\Http\Livewire;
 
 use App\Models\Receipt;
 use App\Models\Status;
+use App\Models\Department;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 final class RequestList extends PowerGridComponent
 {
@@ -68,16 +70,45 @@ final class RequestList extends PowerGridComponent
     public function datasource(): Builder
     {
         if(Auth::user()->department == 0){
-            return Receipt::query()
-            ->join('status', function ($categories) {
-                $categories->on('receipt.supply_status', '=', 'status.status');
-            })
-            ->where('receipt.is_supply', 1)
-            ->orderBy('receipt.created_at', 'DESC')
-            ->select([
-                'receipt.*',
-                'status.*',
-            ]);
+            if(Auth::user()->user_type != 5){
+                return Receipt::query()
+                ->join('status', function ($categories) {
+                    $categories->on('receipt.supply_status', '=', 'status.status');
+                })
+                ->join('user', function ($categories) {
+                    $categories->on('receipt.user_id', '=', 'user.id');
+                })
+                ->join('department_type', function ($categories) {
+                    $categories->on('user.department', '=', 'department_type.department');
+                })
+                ->where('receipt.is_supply', 1)
+                ->orderBy('receipt.created_at', 'DESC')
+                ->select([
+                    DB::raw('CONCAT(user.firstname, " ", user.lastname) AS fullname'),
+                    'department_type.department_description as department',
+                    'receipt.*',
+                    'status.*',
+                ]);
+            }else{
+                return Receipt::query()
+                ->join('status', function ($categories) {
+                    $categories->on('receipt.supply_status', '=', 'status.status');
+                })
+                ->join('user', function ($categories) {
+                    $categories->on('receipt.user_id', '=', 'user.id');
+                })
+                ->join('department_type', function ($categories) {
+                    $categories->on('user.department', '=', 'department_type.department');
+                })
+                ->where('receipt.is_supply', 0)
+                ->orderBy('receipt.created_at', 'DESC')
+                ->select([
+                    DB::raw('CONCAT(user.firstname, " ", user.lastname) AS fullname'),
+                    'department_type.department_description as department',
+                    'receipt.*',
+                    'status.*',
+                ]);
+            }
         }else{
             return Receipt::query()
             ->join('status', function ($categories) {
@@ -86,10 +117,15 @@ final class RequestList extends PowerGridComponent
             ->join('user', function ($categories) {
                 $categories->on('receipt.user_id', '=', 'user.id');
             })
+            ->join('department_type', function ($categories) {
+                $categories->on('user.department', '=', 'department_type.department');
+            })
             ->where('user.department', Auth::user()->department)
             ->where('receipt.is_supply', 0)
             ->orderBy('receipt.created_at', 'DESC')
             ->select([
+                DB::raw('CONCAT(user.firstname, " ", user.lastname) AS fullname'),
+                'department_type.department_description as department',
                 'receipt.*',
                 'status.*',
             ]);
@@ -130,16 +166,28 @@ final class RequestList extends PowerGridComponent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
+
+            ->addColumn('department')
+
+
             ->addColumn('created_at')
 
            /** Example of custom column using a closure **/
-            ->addColumn('created_at_lower', function (Receipt $model) {
-                return strtolower(e($model->created_at));
-            })
+            // ->addColumn('created_at_lower', function (Receipt $model) {
+            //     return strtolower(e($model->created_at));
+            // })
 
             ->addColumn('updated_at')
             ->addColumn('supply_status')
             ->addColumn('user_id')
+
+            ->addColumn('created_at_formatted', function (Receipt $model) {
+                return date_format(Carbon::parse($model->created_at), 'M/d h:i A');
+            })
+            ->addColumn('updated_at_formatted', function (Receipt $model) {
+                return date_format(Carbon::parse($model->updated_at), 'M/d h:i A');
+            })
+
             ->addColumn('created_at')
             ->addColumn('updated_at');
     }
@@ -161,14 +209,25 @@ final class RequestList extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id'),
+            Column::make('RECEIPT', 'id')
+            ->searchable(),
 
-            Column::make('CREATED AT', 'created_at')
+            Column::make('DEPARTMENT', 'department')
+            ->makeInputSelect(
+                Department::all(),
+                'department_description', //role from usertype
+                'department_description' //role from select all
+            )
+            ->searchable(),
+
+            Column::make('NAME', 'fullname'),
+
+            Column::make('PLACED', 'created_at_formatted')
             ->makeInputDatePicker('created_at')
             ->sortable()
             ->searchable(),
 
-            Column::make('UPDATED AT', 'updated_at')
+            Column::make('LAST UPDATED', 'updated_at_formatted')
             ->makeInputDatePicker('updated_at')
             ->sortable()
             ->searchable(),
@@ -179,8 +238,6 @@ final class RequestList extends PowerGridComponent
                 'status_desc', //role from usertype
                 'status_desc' //role from select all
             ),
-
-            Column::make('USER ID', 'user_id'),
         ]
     ;
     }

@@ -13,6 +13,8 @@ use WireUi\Traits\Actions;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Messages;
+use App\Models\Department;
+
 class SuppliumBag extends Component
 {
     use WithPagination;
@@ -47,29 +49,26 @@ class SuppliumBag extends Component
             }
         }
 
-        
 
         //all supplies will have same receipt id and destination
-        $receipt_supplies = rand(00000000,99999999);
+        $receipt_supplies = Receipt::create([
+            'user_id' => Auth::user()->id,
+            'supply_status' => 0,
+            'is_supply' => 1
+        ])->id;
 
+        //all request item have same receipt id
         foreach($supplies as $supply){
-
             Requests::create([
                 'supply_id' => $supply['id'],
-                'id' => $receipt_supplies,
+                'receipt_id' => $receipt_supplies,
                 'quantity' => $supply['quantity'],
             ]);
 
-            Receipt::create([
-                'user_id' => Auth::user()->id,
-                'id' => $receipt_supplies,
-                'supply_status' => 0,
-                'is_supply' => 1
-            ]);
-
-
             Bag::where('user_id', Auth::user()->id)->where('supply_id', $supply['id'])->delete();
         }
+
+    
 
         if(!empty($supplies)){
 
@@ -95,86 +94,168 @@ class SuppliumBag extends Component
 
         }
 
-
-        //all equipments will have same receipt id and destination
-        $receipt_equipments = rand(00000000,99999999);
-
-        foreach($equipments as $equipment){
-
-            Requests::create([
-                'supply_id' => $equipment['id'],
-                'id' => $receipt_equipments,
-                'quantity' => $equipment['quantity'],
-            ]);
-
+        
+        //equipmetns
             switch (Auth::user()->user_type) {
                 case 4:
-                    Receipt::create([
-                        'user_id' => Auth::user()->id,
-                        'id' => $receipt_equipments,
-                        'supply_status' => 0,
-                        'is_supply' => 0
-                    ]);
 
- 
+                    $isnonteach = Department::find(Auth::user()->department)->nonteaching;
+                    if($isnonteach == 0){
+                        //all equipments will have same receipt id and destination
+                        $receipt_equipments = Receipt::create([
+                            'user_id' => Auth::user()->id,
+                            'supply_status' => 0,
+                            'is_supply' => 0
+                        ])->id;
 
+                        foreach ($equipments as $equipment) {
+                            Requests::create([
+                                'supply_id' => $equipment['id'],
+                                'receipt_id' => $receipt_equipments,
+                                'quantity' => $equipment['quantity'],
+                            ]);
+
+                            Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                        }
+                    }else{
+                        $receipt_equipments = Receipt::create([
+                            'user_id' => Auth::user()->id,
+                            'supply_status' => 2,
+                            'chair_at' => Carbon::now(),
+                            'dean_at' => Carbon::now(),
+                            'is_supply' => 0
+                        ])->id;
+    
+                        foreach ($equipments as $equipment) {
+                            Requests::create([
+                                'supply_id' => $equipment['id'],
+                                'receipt_id' => $receipt_equipments,
+                                'quantity' => $equipment['quantity'],
+                            ]);
+    
+                            Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                        }
+                    }
+        
                     break;
                 case 3:
-                    Receipt::create([
+
+                    //all equipments will have same receipt id and destination
+                    $receipt_equipments = Receipt::create([
                         'user_id' => Auth::user()->id,
-                        'id' => $receipt_equipments,
                         'supply_status' => 1,
                         'chair_at' => Carbon::now(),
                         'is_supply' => 0
-                    ]);
+                    ])->id;
+
+                    foreach ($equipments as $equipment) {
+                        Requests::create([
+                            'supply_id' => $equipment['id'],
+                            'receipt_id' => $receipt_equipments,
+                            'quantity' => $equipment['quantity'],
+                        ]);
+
+                        Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                    }
 
         
                     break;
                 case 2:
-                    Receipt::create([
+
+                    $receipt_equipments = Receipt::create([
                         'user_id' => Auth::user()->id,
-                        'id' => $receipt_equipments,
-                        'supply_status' => 4,
+                        'supply_status' => 2,
                         'chair_at' => Carbon::now(),
                         'dean_at' => Carbon::now(),
                         'is_supply' => 0
-                    ]);
+                    ])->id;
 
-               
+                    foreach ($equipments as $equipment) {
+                        Requests::create([
+                            'supply_id' => $equipment['id'],
+                            'receipt_id' => $receipt_equipments,
+                            'quantity' => $equipment['quantity'],
+                        ]);
+
+                        Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                    }
         
+                    break;
+
+                case 5:
+
+                    $receipt_equipments = Receipt::create([
+                        'user_id' => Auth::user()->id,
+                        'supply_status' => 4,
+                        'chair_at' => Carbon::now(),
+                        'dean_at' => Carbon::now(),
+                        'ced_at' => Carbon::now(),
+                        'is_supply' => 0
+                    ])->id;
+
+                    foreach ($equipments as $equipment) {
+                        Requests::create([
+                            'supply_id' => $equipment['id'],
+                            'receipt_id' => $receipt_equipments,
+                            'quantity' => $equipment['quantity'],
+                        ]);
+
+                        Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                    }
         
                     break;
             }
 
  
-            Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
-        }
+   
+      
 
         if(!empty($equipments)){
             switch (Auth::user()->user_type) {
                 case 4:
-
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt_equipments,
-                        'notification_type' => 100,
-                        'is_supply' => 0
-                    ]);   
-
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt_equipments,
-                        'notification_type' => 0,
-                        'is_supply' => 0
-                    ]);    
-
-                    Messages::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt_equipments,
-                        'message_type' => 0
-                    ]);
-  
-
+                    $isnonteach = Department::find(Auth::user()->department)->nonteaching;
+                    if($isnonteach == 0){
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt_equipments,
+                            'notification_type' => 100,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt_equipments,
+                            'notification_type' => 0,
+                            'is_supply' => 0
+                        ]);    
+    
+                        Messages::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt_equipments,
+                            'message_type' => 0
+                        ]);
+                    }else{
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt_equipments,
+                            'notification_type' => 105,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Notifications::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt_equipments,
+                            'notification_type' => 0,
+                            'is_supply' => 0
+                        ]);    
+    
+                        Messages::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $receipt_equipments,
+                            'message_type' => 0
+                        ]);
+                    }
+               
         
                     break;
                 case 3:
@@ -216,6 +297,14 @@ class SuppliumBag extends Component
         
                     break;
                 case 2:
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'notification_type' => 105,
+                        'is_supply' => 0
+                    ]);   
+
                     Notifications::create([
                         'user_id' => Auth::user()->id,
                         'receipt_id' => $receipt_equipments,
@@ -237,19 +326,6 @@ class SuppliumBag extends Component
                         'is_supply' => 0
                     ]);   
 
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt_equipments,
-                        'notification_type' => 3,
-                        'is_supply' => 0
-                    ]);   
-
-                    Notifications::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt_equipments,
-                        'notification_type' => 4,
-                        'is_supply' => 0
-                    ]);   
 
                     Messages::create([
                         'user_id' => Auth::user()->id,
@@ -268,12 +344,69 @@ class SuppliumBag extends Component
                         'receipt_id' => $receipt_equipments,
                         'message_type' => 2
                     ]);
+        
+                    break;
 
-                    Messages::create([
+                 case 5:
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'notification_type' => 0,
+                    //     'is_supply' => 0
+                    // ]);    
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'notification_type' => 1,
+                    //     'is_supply' => 0
+                    // ]);
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'notification_type' => 2,
+                    //     'is_supply' => 0
+                    // ]);   
+
+                    // Notifications::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'notification_type' => 8,
+                    //     'is_supply' => 0
+                    // ]);   
+
+                    Notifications::create([
                         'user_id' => Auth::user()->id,
                         'receipt_id' => $receipt_equipments,
-                        'message_type' => 3
-                    ]);
+                        'notification_type' => 4,
+                        'is_supply' => 0
+                    ]);   
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'message_type' => 0
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'message_type' => 1
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'message_type' => 2
+                    // ]);
+
+                    // Messages::create([
+                    //     'user_id' => Auth::user()->id,
+                    //     'receipt_id' => $receipt_equipments,
+                    //     'message_type' => 8
+                    // ]);
 
                     Messages::create([
                         'user_id' => Auth::user()->id,

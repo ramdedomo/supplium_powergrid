@@ -33,6 +33,7 @@ class EditUser extends ModalComponent
 
         $this->user = $user;
 
+     
         if(Auth::user()->user_type != 1){
             $this->usertype_ = UserType::where('user_type', '>', 1)->get();
 
@@ -47,9 +48,17 @@ class EditUser extends ModalComponent
         }else{
             $this->usertype_ = UserType::where('user_type', '>', 1)->get();
             $this->department_ = Department::where('department', '!=', 0)->get();
+
+            foreach ($this->department_ as $dep) {
+                if($dep->nonteaching == 1){
+                    $dep->nonteaching = "Non-Teaching";
+                }else{
+                    $dep->nonteaching = "Teaching";
+                }
+            }
         }
 
-        $this->userdetails = User::where('id', $user)->first();
+        $this->userdetails = User::where('id', $this->user)->first();
 
         $this->userfirstname = $this->userdetails->firstname;
         $this->userlastname = $this->userdetails->lastname;
@@ -210,6 +219,7 @@ class EditUser extends ModalComponent
 
     public function render()
     {
+
         return view('livewire.edit-user');
     }
 }

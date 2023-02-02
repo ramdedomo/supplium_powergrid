@@ -127,7 +127,12 @@
 
             <div class="mt-2 text-center py-2 font-bold bg-gray-100 border-l-4 border-amber-500">
                 @if(Auth::user()->department == 0)
+                    @if(Auth::user()->user_type == 5)
+                    Campus Executive Director
+                    @else
                     Administrator
+                    @endif
+
                 @else
                     @php
                         foreach (App\Models\Department::all() as $department) {
@@ -163,6 +168,11 @@
                             </a>
 
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            href="{{route('departments')}}">
+                                <x-icon name="user-group" class="w-5 h-5 mr-2" /> Departments
+                            </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
@@ -171,6 +181,41 @@
                                 href="#">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Report
                              </a>
+                        @elseif (Auth::user()->user_type == 5)
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{ route('dashboard') }}">
+                                <x-icon name="view-list" class="w-5 h-5 mr-2" /> Dashboard
+                            </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{route('list')}}">
+                                <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
+                            </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{route('requests')}}">
+                                <x-icon name="inbox" class="w-5 h-5 mr-2" /> Requests
+                            </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{route('myrequests')}}">
+                                <x-icon name="paper-airplane" class="w-5 h-5 mr-2" /> Requested Items
+                            </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            href="{{route('bag')}}">
+                            <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
+                        </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            href="{{route('notifications')}}">
+                                <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
+                            </a>
+
+                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            href="#">
+                            <x-icon name="bell" class="w-5 h-5 mr-2" /> Report
+                         </a>
                         @elseif(Auth::user()->user_type  == 2)
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{ route('dashboard') }}">
@@ -275,6 +320,7 @@
                               
                             </a>
                         @endif
+                        
 
 
 
@@ -309,6 +355,8 @@
                                         Chair
                                     @elseif($user_info->user_type == 4)
                                         User
+                                    @else
+                                        Campus Executive Director
                                     @endif
 
                                 </span>

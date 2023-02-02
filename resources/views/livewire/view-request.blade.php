@@ -1,8 +1,7 @@
 <div class="border-b-4 border-amber-500 rounded-md p-5 font-mono">
 
 
-
-
+    
 
     <div class="flow-root">
         <ul>
@@ -49,7 +48,7 @@
                 class="bg-green-200 outline-1 text-green-800 outline-green-400 text-center outline rounded-md justify-center mb-3 p-3">
                 <div class="flex items-center justify-center">
                     <x-icon name="information-circle" class="w-5 h-5 mr-3" />
-                    Your Request is Ready for Pick Up in Supply Office!
+                    Your Request is Ready for Pick Up.
                 </div>
 
                 <div class="text-xs">
@@ -165,11 +164,11 @@
                 class="bg-green-200 outline-1 text-green-800 outline-green-400 text-center outline rounded-md justify-center mb-3 p-3">
                 <div class="flex items-center justify-center">
                     <x-icon name="information-circle" class="w-5 h-5 mr-3" />
-                    Your Request is Ready for Pick Up in your Department Office!
+                    Your Request is Ready for Pick Up.
                 </div>
 
                 <div class="text-xs">
-                    Just present your name and the request no.
+                    Just present the receipt.  <x-button wire:click="getreceipt" 2xs icon="receipt-tax" emerald label="Receipt"/>
                 </div>
             </div>
         @endif
@@ -179,7 +178,7 @@
                 class="bg-green-200 outline-1 text-green-800 outline-green-400 text-center outline rounded-md justify-center mb-3 p-3">
                 <div class="flex items-center justify-center">
                     <x-icon name="information-circle" class="w-5 h-5 mr-3" />
-                    This Request is Completed.
+                    This Request is Completed.  <x-button wire:click="getreceipt" 2xs icon="receipt-tax" emerald label="Receipt"/>
                 </div>
             </div>
         @endif
@@ -215,7 +214,7 @@
                 <div class="flex justify-between">
                     Chair (Approved):
                     <span class="font-bold">
-                        {{ date_format(Carbon\Carbon::parse($receipt->accepted_at), 'M/d h:i A') }}</span>
+                        {{ date_format(Carbon\Carbon::parse($receipt->chair_at), 'M/d h:i A') }}</span>
                 </div>
             @endif
 
@@ -223,9 +222,17 @@
                 <div class="flex justify-between">
                     Dean (Approved):
                     <span class="font-bold">
-                        {{ date_format(Carbon\Carbon::parse($receipt->accepted_at), 'M/d h:i A') }}</span>
+                        {{ date_format(Carbon\Carbon::parse($receipt->dean_at), 'M/d h:i A') }}</span>
                 </div>
             @endif
+
+            @if(!is_null($receipt->ced_at))
+            <div class="flex justify-between">
+                CED (Approved): 
+                <span class="font-bold"> {{ date_format(Carbon\Carbon::parse($receipt->ced_at), 'M/d h:i A') }}</span>
+            </div>
+            @endif
+
 
             @if (!is_null($receipt->done_at))
                 <div class="flex justify-between">
@@ -259,7 +266,7 @@
             <div class="grid-cols-1 text-center text-sm bg-red-500 text-white px-2 py-1 rounded-full"> Canceled
             </div>
         @else
-            <div class="grid grid-cols-5 mb-3 gap-6">
+            <div class="grid grid-cols-6 mb-3 gap-6">
                 <div
                     class="grid-cols-1 text-center text-sm @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
                     Placed</div>
@@ -271,7 +278,10 @@
                     class="grid-cols-1 text-center text-sm @if (is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
                     Dean</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    CED</div>
+                <div
+                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
                     Pick Up</div>
                 <div
                     class="grid-cols-1 text-center text-sm @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">

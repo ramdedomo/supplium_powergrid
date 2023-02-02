@@ -36,28 +36,23 @@ class AddUser extends ModalComponent
     }
 
     public function mount(){
-        if(Auth::user()->user_type != 1){
-            $this->usertype_ = UserType::where('user_type', '>', 1)->get();
 
-            foreach(Department::all() as $d){
-                if($d->department == Auth::user()->department){
-                    $this->department_ = [
-                        'id' => $d->department,
-                        'department' => $d->department_short
-                    ];
-                }
-            }
-        }else{
-            $this->usertype_ = UserType::where('user_type', '>', 1)->get();
-            $this->department_ = Department::where('department', '!=', 0)->get();
-        }
-        
     }
 
 
     public function add(){
-        
+    
         $this->validate();
+
+        foreach ($this->department_ as $dep) {
+            if($dep->department == $this->department && $dep->nonteaching == 1){
+                $this->validate([
+                    'usertype' => 'required|in:4'
+                ],[
+                    'in' => 'Selected department is non-teaching, select usertype as "User"'
+                ]);
+            }
+        }
 
         if(Auth::user()->user_type != 1){
             $created = User::create([
@@ -69,14 +64,27 @@ class AddUser extends ModalComponent
                 'department' => $this->department_['id']
             ]);
         }else{
-            $created = User::create([
-                'user_type' => $this->usertype,
-                'email' => $this->email,
-                'password' => Hash::make($this->password),
-                'firstname' => $this->userfirstname,
-                'lastname' => $this->userlastname,
-                'department' => $this->department
-            ]);
+            //if ced or supply
+            if($this->usertype == 5){
+                $created = User::create([
+                    'user_type' => $this->usertype,
+                    'email' => $this->email,
+                    'password' => Hash::make($this->password),
+                    'firstname' => $this->userfirstname,
+                    'lastname' => $this->userlastname,
+                    'department' => 0
+                ]);
+            }else{
+                $created = User::create([
+                    'user_type' => $this->usertype,
+                    'email' => $this->email,
+                    'password' => Hash::make($this->password),
+                    'firstname' => $this->userfirstname,
+                    'lastname' => $this->userlastname,
+                    'department' => $this->department
+                ]);
+            }
+
         }
 
 
@@ -103,7 +111,30 @@ class AddUser extends ModalComponent
     public function render()
     {
 
+        if(Auth::user()->user_type != 1){
+            $this->usertype_ = UserType::where('user_type', '>', 1)->get();
+
+            foreach(Department::all() as $d){
+                if($d->department == Auth::user()->department){
+                    $this->department_ = [
+                        'id' => $d->department,
+                        'department' => $d->department_short
+                    ];
+                }
+            }
+        }else{
+            $this->usertype_ = UserType::where('user_type', '>', 1)->get();
+            $this->department_ = Department::where('department', '!=', 0)->get();
   
+            foreach ($this->department_ as $dep) {
+                if($dep->nonteaching == 1){
+                    $dep->nonteaching = "Non-Teaching";
+                }else{
+                    $dep->nonteaching = "Teaching";
+                }
+            }
+
+        }
 
         return view('livewire.add-user');
     }

@@ -29,5 +29,5 @@ class Receipt extends Model
     /**
      * @var array
      */
-    protected $fillable = ['is_supply', 'id', 'created_at', 'updated_at', 'supply_status', 'user_id', 'accepted_at', 'chair_at', 'dean_at', 'supply_at', 'done_at', 'canceled_at'];
+    protected $fillable = ['ced_at', 'is_supply', 'id', 'created_at', 'updated_at', 'supply_status', 'user_id', 'accepted_at', 'chair_at', 'dean_at', 'supply_at', 'done_at', 'canceled_at'];
 }

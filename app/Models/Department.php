@@ -23,5 +23,5 @@ class Department extends Model
     /**
      * @var array
      */
-    protected $fillable = ['department', 'department_description', 'department_short'];
+    protected $fillable = ['nonteaching', 'department', 'department_description', 'department_short', 'updated_at', 'created_at'];
 }

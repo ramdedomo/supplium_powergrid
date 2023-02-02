@@ -36,7 +36,7 @@ class EditRequest extends ModalComponent
                 case 0:
                     $status = 4;
     
-                    $supplies = Requests::where('id', $this->request)->get();
+                    $supplies = Requests::where('receipt_id', $this->request)->get();
                     foreach($supplies as $supply){
                         Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
                     }
@@ -76,6 +76,12 @@ class EditRequest extends ModalComponent
              
                     break;
                 case 4:
+                    
+                    $supplies = Requests::where('receipt_id', $this->request)->get();
+                    foreach($supplies as $supply){
+                        Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
+                    }
+
                     $status = 5;
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
@@ -104,11 +110,6 @@ class EditRequest extends ModalComponent
             switch ($this->receipt->supply_status) {
                 case 0:
                     $status = 1;
-    
-                    $supplies = Requests::where('id', $this->request)->get();
-                    foreach($supplies as $supply){
-                        Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
-                    }
           
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
@@ -138,7 +139,7 @@ class EditRequest extends ModalComponent
              
                     break;
                 case 1:
-                    $status = 4;
+                    $status = 2;
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
                         'dean_at' => Carbon::now()
@@ -151,6 +152,28 @@ class EditRequest extends ModalComponent
                         'is_supply' => 0
                     ]);   
      
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $exists->receipt_id,
+                        'message_type' => 2
+                    ]);
+
+                    Notifications::create([
+                        'user_id' => $exists->user_id,
+                        'receipt_id' => $exists->receipt_id,
+                        'notification_type' => 105,
+                        'is_supply' => 0
+                    ]);   
+
+                    break;
+
+                case 2:
+                    $status = 4;
+                    Receipt::where('id', $this->request)->update([
+                        'supply_status' => $status,
+                        'ced_at' => Carbon::now()
+                    ]);
+
                     Notifications::create([
                         'user_id' => $exists->user_id,
                         'receipt_id' => $exists->receipt_id,
@@ -158,10 +181,17 @@ class EditRequest extends ModalComponent
                         'is_supply' => 0
                     ]);   
 
+                    Notifications::create([
+                        'user_id' => $exists->user_id,
+                        'receipt_id' => $exists->receipt_id,
+                        'notification_type' => 8,
+                        'is_supply' => 0
+                    ]);   
+     
                     Messages::create([
                         'user_id' => Auth::user()->id,
                         'receipt_id' => $exists->receipt_id,
-                        'message_type' => 2
+                        'message_type' => 8
                     ]);
 
                     Messages::create([
@@ -169,11 +199,14 @@ class EditRequest extends ModalComponent
                         'receipt_id' => $exists->receipt_id,
                         'message_type' => 4
                     ]);
-
-
-
                     break;
                 case 4:
+
+                    $supplies = Requests::where('receipt_id', $this->request)->get();
+                    foreach($supplies as $supply){
+                        Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
+                    }
+
                     $status = 5;
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
@@ -194,6 +227,7 @@ class EditRequest extends ModalComponent
                     ]);
 
                     break;
+                    
               }
 
         }
@@ -312,7 +346,7 @@ class EditRequest extends ModalComponent
         ->first();
 
         $this->requests = Receipt::where('receipt.id', $request)
-        ->join('requests', 'receipt.id', '=', 'requests.id')
+        ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
         ->get();
 
         $count = 0;

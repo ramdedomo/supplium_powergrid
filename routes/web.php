@@ -24,6 +24,8 @@ Route::get('/list', App\Http\Livewire\SuppliumBrowseItems::class)->name('list')-
 
 Route::get('/notifications', App\Http\Livewire\SuppliumNotification::class)->name('notifications')->middleware('checkrole');
 
+Route::get('/departments', App\Http\Livewire\SuppliumDepartments::class)->name('departments')->middleware('checkrole');
+
 
 Route::get('/requests', App\Http\Livewire\SuppliumRequests::class)->name('requests')->middleware('checkrole');
 Route::get('/myrequests', App\Http\Livewire\SuppliumBrowseRequests::class)->name('myrequests')->middleware('checkrole');
