@@ -72,8 +72,8 @@ return [
     |
     */
 
-    'cached_data' => true,
-
+    //'cached_data' => true,
+    'cached_data' => false,
     /*
     |--------------------------------------------------------------------------
     | AlpineJS CDN

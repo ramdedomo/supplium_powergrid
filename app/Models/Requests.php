@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Supply;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,4 +17,9 @@ class Requests extends Model
      * @var array
      */
     protected $fillable = ['id', 'supply_id', 'created_at', 'updated_at', 'quantity', 'receipt_id'];
+
+    public function supply()
+    {
+        return $this->belongsTo(Supply::class, 'id')->select(['quantity']);
+    }
 }

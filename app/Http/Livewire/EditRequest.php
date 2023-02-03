@@ -80,6 +80,7 @@ class EditRequest extends ModalComponent
                     $supplies = Requests::where('receipt_id', $this->request)->get();
                     foreach($supplies as $supply){
                         Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
+
                     }
 
                     $status = 5;
@@ -205,6 +206,49 @@ class EditRequest extends ModalComponent
                     $supplies = Requests::where('receipt_id', $this->request)->get();
                     foreach($supplies as $supply){
                         Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
+                        $stocks = Supply::find($supply->supply_id)->supply_stocks;
+       
+                        if($stocks < 20 && $stocks >= 10){
+        
+                            Notifications::create([
+                                'user_id' => $exists->user_id,
+                                'receipt_id' => $exists->receipt_id,
+                                'notification_type' => 220,
+                                'is_supply' => 0
+                            ]);
+        
+                            if($stocks < 10 && $stocks >= 5){
+        
+                                Notifications::create([
+                                    'user_id' => $exists->user_id,
+                                    'receipt_id' => $exists->receipt_id,
+                                    'notification_type' => 210,
+                                    'is_supply' => 0
+                                ]);
+        
+                                if($stocks < 5 && $stocks >= 1){
+        
+                                    Notifications::create([
+                                        'user_id' => $exists->user_id,
+                                        'receipt_id' => $exists->receipt_id,
+                                        'notification_type' => 205,
+                                        'is_supply' => 0
+                                    ]);
+        
+                                    if($stocks == 0){
+        
+                                        Notifications::create([
+                                            'user_id' => $exists->user_id,
+                                            'receipt_id' => $exists->receipt_id,
+                                            'notification_type' => 200,
+                                            'is_supply' => 0
+                                        ]);
+                
+                                    }
+                                }
+                            }
+                        }
+
                     }
 
                     $status = 5;

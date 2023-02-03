@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Requests;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -31,6 +31,11 @@ class Supply extends Model
     public static function searchall($search){
         return empty($search) ? static::query()
         : static::query()->where('supply.supply_name', 'like', '%'.$search.'%');
+    }
+
+    public function requests()
+    {
+        return $this->hasMany(Requests::class, 'supply_id');
     }
 
     

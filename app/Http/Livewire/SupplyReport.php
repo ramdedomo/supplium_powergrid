@@ -2,27 +2,18 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Department;
+use App\Models\Supply;
+use App\Models\Requests;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-final class Departments extends PowerGridComponent
+final class SupplyReport extends PowerGridComponent
 {
     use ActionButton;
-    public string $primaryKey = 'department';
-    public string $sortField = 'department';
-    /*
-    |--------------------------------------------------------------------------
-    |  Features Setup
-    |--------------------------------------------------------------------------
-    | Setup Table's general features
-    |
-    */
-
-
+    
     protected function getListeners()
     {
         return [
@@ -32,11 +23,17 @@ final class Departments extends PowerGridComponent
             'pg:multiSelect-'  .  $this->tableName  => 'multiSelectChanged',
             'pg:toggleColumn-' .  $this->tableName  => 'toggleColumn',
             'pg:eventRefresh-' .  $this->tableName  => '$refresh',
-            'itemUpdated' => '$refresh',
         ];
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    |  Features Setup
+    |--------------------------------------------------------------------------
+    | Setup Table's general features
+    |
+    */
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -50,6 +47,7 @@ final class Departments extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
         ];
+
     }
 
     /*
@@ -63,15 +61,22 @@ final class Departments extends PowerGridComponent
     /**
     * PowerGrid datasource.
     *
-    * @return Builder<\App\Models\Department>
+    * @return Builder<\App\Models\Supply>
     */
+
     public function datasource(): Builder
     {
-
-        return Department::query()
-        ->where('department', '>', 0);
-
-
+        $supplies = Supply::join('supply_type', function ($categories) {
+                        $categories->on('supply.supply_type', '=', 'supply_type.supply_type');
+                    })
+                    ->select([
+                        'supply.*',
+                        'supply_type.supply_name as supply_type',
+                    ])
+                    ->withcount('requests');
+ 
+        return $supplies;
+            //DB::raw('COUNT(issue_subscriptions.issue_id) as followers')
     }
 
     /*
@@ -106,11 +111,18 @@ final class Departments extends PowerGridComponent
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
-            // ->addColumn('department')
-            // ->addColumn('department')
-            ->addColumn('department_description')
-            ->addColumn('department_short');
+            ->addColumn('requests_count')
+            ->addColumn('id')
+            // ->addColumn('supply_price')
+            ->addColumn('supply_type')
+            ->addColumn('supply_name')
+            ->addColumn('supply_stocks')
+            ->addColumn('created_at_formatted', fn (Supply $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+            ->addColumn('updated_at_formatted', fn (Supply $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'))
+            ->addColumn('supply_desc')
+            ->addColumn('supply_color');
     }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -129,19 +141,29 @@ final class Departments extends PowerGridComponent
     public function columns(): array
     {
         return [
-            // Column::make('DEPARTMENT', 'department')
+
+            // Column::make('SUPPLY PRICE', 'supply_price')
+            //     ->sortable()
+            //     ->searchable(),
+
+            Column::make('TYPE', 'supply_type')
+                ->makeBooleanFilter('supply.supply_type', 'Equipments', 'Supply')
+                ->searchable(),
+
+            Column::make('NO. OF REQUEST', 'requests_count')
+                ->makeInputDatePicker('created_at')
+                ->searchable(),
+
+            // Column::make('SUPPLY TYPE', 'supply_type')
             //     ->makeInputRange(),
 
-            // Column::make('DEPARTMENT', 'department')
-            //     ->makeInputRange(),
-
-            Column::make('DEPARTMENT DESCRIPTION', 'department_description')
+            Column::make('SUPPLY NAME', 'supply_name')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('SHORT FORM', 'department_short')
-                ->sortable()
-                ->searchable(),
+            Column::make('SUPPLY STOCKS', 'supply_stocks')
+                ->makeInputRange(),
+
 
         ]
 ;
@@ -156,48 +178,26 @@ final class Departments extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Department Action Buttons.
+     * PowerGrid Supply Action Buttons.
      *
      * @return array<int, Button>
      */
 
-    
+    /*
     public function actions(): array
     {
        return [
-                 Button::add('edit')
-                ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-              </svg>')
-                ->class('outline-none inline-flex justify-center items-center group transition-all ease-in duration-150 focus:ring-2 focus:ring-offset-2 hover:shadow-sm disabled:opacity-80 disabled:cursor-not-allowed rounded gap-x-2 text-sm px-2 py-2 text-slate-500 hover:bg-slate-100 ring-slate-200 dark:ring-slate-600 dark:border-slate-500
-                dark:ring-offset-slate-800 dark:text-slate-400 dark:hover:bg-slate-700')
-                ->openModal('edit-department', ["department" => 'department']),
+           Button::make('edit', 'Edit')
+               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+               ->route('supply.edit', ['supply' => 'id']),
 
-        //    Button::make('destroy', 'Delete')
-        //        ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-        //        ->route('department.destroy', ['department' => 'id'])
-        //        ->method('delete')
+           Button::make('destroy', 'Delete')
+               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
+               ->route('supply.destroy', ['supply' => 'id'])
+               ->method('delete')
         ];
     }
-
-    public function header(): array
-    {
-        return [
-            Button::add('add')
-                ->caption('<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-              </svg>')
-                ->class('block bg-slate-50 text-slate-500 border border-slate-300 rounded py-1.5 px-3 leading-tight
-                focus:outline-none focus:bg-white focus:border-slate-600 dark:border-slate-500 dark:bg-slate-700
-                2xl:dark:placeholder-slate-300 dark:text-slate-200 dark:text-slate-300')
-                ->openModal('add-department', []),
-
-            Button::add(''),
-                
-            //...
-        ];
-    }
-
+    */
 
     /*
     |--------------------------------------------------------------------------
@@ -208,7 +208,7 @@ final class Departments extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Department Action Rules.
+     * PowerGrid Supply Action Rules.
      *
      * @return array<int, RuleActions>
      */
@@ -220,7 +220,7 @@ final class Departments extends PowerGridComponent
 
            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($department) => $department->id === 1)
+                ->when(fn($supply) => $supply->id === 1)
                 ->hide(),
         ];
     }

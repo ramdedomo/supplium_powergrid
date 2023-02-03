@@ -42,6 +42,8 @@ class ViewRequest extends ModalComponent
             Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
         }
 
+
+
         $exists = Notifications::where('receipt_id', $this->request)->first();
         
         Notifications::create([
