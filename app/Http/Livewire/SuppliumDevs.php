@@ -10,7 +10,7 @@ class SuppliumDevs extends ModalComponent
     public function render()
     {
         $developer = [
-            ['role' => 'Programmer', 'name' => 'Ram Wendel S. Dedomo'],
+            ['role' => 'Programmer', 'name' => 'Dedomo, Ram Wendel'],
             ['role' => 'Project Documentation', 'name' => 'Bautista, Marc Adrian'],
             ['role' => 'Project Documentation', 'name' => 'Caba, Prince Gabriel'],
             ['role' => 'Project Documentation', 'name' => 'Lantonio, Anthony'],

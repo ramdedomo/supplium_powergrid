@@ -112,7 +112,7 @@ class AddUser extends ModalComponent
     {
 
         if(Auth::user()->user_type != 1){
-            $this->usertype_ = UserType::where('user_type', '>', 1)->get();
+            $this->usertype_ = UserType::where('user_type', '>', 1)->where('user_type', '<', 5)->get();
 
             foreach(Department::all() as $d){
                 if($d->department == Auth::user()->department){
