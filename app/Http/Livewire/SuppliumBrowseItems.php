@@ -13,7 +13,7 @@ class SuppliumBrowseItems extends Component
     public $search;
     public $sort;
     public $type;
-
+    public $min;
     public function mount(){
     
     }
@@ -41,6 +41,9 @@ class SuppliumBrowseItems extends Component
             }elseif($this->sort == 'High - Stocks'){
                 $query->orderBy('supply_stocks', 'DESC');
             }
+        })
+        ->when(!empty($this->min), function ($query) {
+            $query->where('supply_stocks', '<=', $this->min);
         })
         ->join('supply_type', 'supply.supply_type', '=', 'supply_type.supply_type')
         ->select('supply.*', 'supply_type.supply_name as supplyname')

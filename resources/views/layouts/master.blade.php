@@ -102,13 +102,20 @@
             x-data="{ open: false }">
             <div class="flex-shrink-0 px-4 py-2 flex flex-row items-center justify-between">
 
-                <a href="#" class="rounded-lg flex justify-between w-full p-2">
-                    <div class="flex flex-col space-y-0">
-                        <span
-                            class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline font-bold">Supplium</span>
-                        <span class="text-xs flex items-center">Supply Inventory System</span>
+               
+                    <div class="flex flex-col space-y-0 w-full p-2">
+                    <a href="#" class="rounded-lg flex justify-between w-full">
+                        <span class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline font-bold">Supplium</span>
+                    </a>
+                        <div class="text-xs flex items-center justify-between">
+                            <div>Supply Inventory System</div>
+
+                            <div>
+                               <a class="font-bold hover:text-amber-500 flex items-center cursor-pointer" onclick="Livewire.emit('openModal', 'supplium-devs')"> <x-icon name="user-group" class="w-3 h-3 mr-1" solid /> The Devs</a>
+                            </div>
+                        </div>
                     </div>
-                </a>
+               
 
         
 
@@ -172,15 +179,17 @@
                                 <x-icon name="user-group" class="w-5 h-5 mr-2" /> Departments
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                            href="{{route('notifications')}}">
-                                <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
-                            </a>
-
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <div class="flex gap-2">
+                                <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{route('notifications')}}">
+                                    <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
+                                </a>
+    
+                                <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('reports')}}">
                                 <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                              </a>
+                            </div>
                         @elseif (Auth::user()->user_type == 5)
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{ route('dashboard') }}">
@@ -207,15 +216,17 @@
                             <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
                         </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                        <div class="flex gap-2">
+                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                          </a>
+                        </div>
                         @elseif(Auth::user()->user_type  == 2)
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{ route('dashboard') }}">
@@ -247,15 +258,18 @@
                             <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
                         </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                        <div class="flex gap-2">
+                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                          </a>
+                        </div>
+
                         @elseif(Auth::user()->user_type  == 3)
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{ route('dashboard') }}">
@@ -287,15 +301,17 @@
                             <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
                         </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                                href="{{route('notifications')}}">
+                        <div class="flex gap-2">
+                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                          </a>
+                        </div>
                         @elseif(Auth::user()->user_type  == 4)
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('list')}}">

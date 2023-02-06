@@ -122,32 +122,23 @@
             <div class="grid-cols-1 text-center text-sm bg-red-500 text-white px-2 py-1 rounded-full"> Canceled
             </div>
         @else
-            <div class="grid grid-cols-4 mb-3 gap-6">
+            <div class="grid grid-cols-4 mb-3 gap-3 p-1 border-2 rounded-full">
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Placed</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Placed</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Supply Office</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Supply Office</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Pick Up</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Pick Up</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Done</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Done</div>
             </div>
         @endif
 
-        @if ($receipt->supply_status != 7)
-            <div class="h-3 relative w-full rounded-full overflow-hidden">
-                <div class="w-full h-full bg-gray-200 absolute"></div>
-                <div class="h-full bg-amber-500 absolute"
-                    @if (!is_null($receipt->created_at)) style="width:{{ $receipt->percent }}%" @endif
-                    @if (!is_null($receipt->supply_at)) style="width:{{ $receipt->percent }}%" @endif
-                    @if (!is_null($receipt->done_at)) style="width:{{ $receipt->percent }}%" @endif
-                    @if (!is_null($receipt->canceled_at)) style="width:{{ $receipt->percent }}%" @endif></div>
-            </div>
-        @endif
+
     @else
         @if (is_null($receipt->chair_at) && is_null($receipt->canceled_at) && $user->user_type == 4)
             <x-button wire:click="cancel" class="w-full" outline label="Cancel" />
@@ -266,46 +257,31 @@
             <div class="grid-cols-1 text-center text-sm bg-red-500 text-white px-2 py-1 rounded-full"> Canceled
             </div>
         @else
-            <div class="grid grid-cols-6 mb-3 gap-6">
+            <div class="grid grid-cols-6 mb-3 gap-3 p-1 border-2 rounded-full">
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Placed</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Placed</div>
                 {{-- <div class="grid-cols-1 text-center text-sm @if (is_null($receipt->accepted_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Accepted</div> --}}
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->chair_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Chair</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->chair_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Chair</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Dean</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Dean</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    CED</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> CED</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Pick Up</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Pick</div>
                 <div
-                    class="grid-cols-1 text-center text-sm @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    Done</div>
+                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Done</div>
             </div>
         @endif
 
-        @if ($receipt->supply_status != 7)
-            <div class="h-3 relative w-full rounded-full overflow-hidden">
-                <div class="w-full h-full bg-gray-200 absolute"></div>
-                <div class="h-full bg-amber-500 absolute"
-                    @if (!is_null($receipt->created_at)) style="width:{{ $receipt->percent }}%" @endif
-                    {{-- @if (!is_null($receipt->accepted_at))
-                            style="width:{{$receipt->percent}}%"
-                            @endif --}}
-                    @if (!is_null($receipt->chair_at)) style="width:{{ $receipt->percent }}%" @endif
-                    @if (!is_null($receipt->dean_at)) style="width:{{ $receipt->percent }}%" @endif
-                    {{-- @if (!is_null($receipt->supply_at))
-                            style="width:{{$receipt->percent}}%"
-                            @endif --}}
-                    @if (!is_null($receipt->done_at)) style="width:{{ $receipt->percent }}%" @endif
-                    @if (!is_null($receipt->canceled_at)) style="width:{{ $receipt->percent }}%" @endif></div>
-            </div>
-        @endif
+
+
     @endif
 
 

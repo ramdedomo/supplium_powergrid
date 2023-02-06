@@ -22,6 +22,7 @@
 
         <div class="flex justify-between bg-gray-100 rounded-md p-2">
             <div class="flex gap-2">
+                <x-input class="w-14" placeholder="Min." wire:model="min"/>
                 <x-select placeholder="Type" :options="['Supplies', 'Equipments']" wire:model="type" />
                 <x-select  placeholder="Sort" :options="['A-Z', 'Z-A', 'Low - High', 'High - Low']" wire:model="sort" />
             </div>
