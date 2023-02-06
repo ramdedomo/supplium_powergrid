@@ -6,13 +6,12 @@
 
     <div class="flex justify-between mb-3">
         <div>
-            <x-button wire:click="get" outline label="Download Report" class=" shadow-sm" />
+            <x-button wire:click="$emit('openModal', 'download-report')" outline label="Download Report" class=" shadow-sm" />
         </div>
 
 
         <div class="flex gap-2">
             <x-select 
-            searchable="false"
             placeholder="Month" 
             :options="$getmonth"
             option-label="month"
@@ -20,7 +19,6 @@
             wire:model="month" />
 
             <x-select 
-            searchable="false"
             placeholder="Year" 
             :options="$getyear"
             option-label="year"
@@ -88,6 +86,9 @@
 
                         </tbody>
                     </table>
+                    <div class="mt-3">
+                        {{ $supplies->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,12 +109,17 @@
                                     Department
                                 </th>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-2 text-left">
-                                    Type
+                                    Department Type
                                 </th>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-2 text-left">
-                                    No. of Request
+                                    No. of Request (Equipments)
                                 </th>
-
+                                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-2 text-left">
+                                    No. of Request (Supply)
+                                </th>
+                                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-2 text-left">
+                                    Total No. of Request
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -130,6 +136,15 @@
                                         Teaching
                                     @endif
                                 </td>
+
+                                <td class="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                                    {{$department->request_count_equipments}}
+                                </td>
+
+                                <td class="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                                    {{$department->request_count_supply}}
+                                </td>
+
                                 <td class="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">
                                     {{$department->request_count}}
                                 </td>
@@ -141,6 +156,10 @@
 
                         </tbody>
                     </table>
+                    <div class="mt-3">
+                        {{ $departments->links() }}
+                    </div>
+               
                 </div>
             </div>
         </div>
