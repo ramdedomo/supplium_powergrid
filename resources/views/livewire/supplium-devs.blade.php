@@ -7,12 +7,12 @@
                 <img width="35px" src="{{ asset('images/HeadSupplium.png') }}" alt="">
         </span>
         
-        <span class="flex justify-center px-4 py-1 bg-gray-50 rounded-md mb-3 border-2 border-gray-100">
+        <span class="font-mono flex justify-center px-4 py-1 bg-gray-50 rounded-md mb-3 border-2 border-gray-100">
             The Developers
         </span>
 
         @foreach ($developers as $dev)
-        <div class="flex justify-between bg-gray-100 rounded-md px-2 py-1 mb-2 border-b-2 border-gray-300">
+        <div class="font-mono flex justify-between bg-gray-100 rounded-md px-2 py-1 mb-2 border-b-2 border-gray-300">
             <div>
                 {{$dev['role']}}
             </div>
@@ -24,7 +24,7 @@
 
         <hr class="mt-5">
 
-        <div class="mt-5 text-xs flex justify-between">
+        <div class="font-mono mt-5 text-xs flex justify-between">
             <div>
                 Supplium - Supply Inventory System {{Carbon\Carbon::now()->year}}
             </div>

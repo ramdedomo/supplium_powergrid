@@ -180,12 +180,12 @@
                             </a>
 
                             <div class="flex gap-2">
-                                <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('notifications')}}">
                                     <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                                 </a>
     
-                                <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('reports')}}">
                                 <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                              </a>
@@ -217,12 +217,12 @@
                         </a>
 
                         <div class="flex gap-2">
-                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
 
-                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                          </a>
@@ -259,12 +259,12 @@
                         </a>
 
                         <div class="flex gap-2">
-                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
 
-                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                          </a>
@@ -302,12 +302,12 @@
                         </a>
 
                         <div class="flex gap-2">
-                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('notifications')}}">
                                 <x-icon name="bell" class="w-5 h-5 mr-2" /> Notifications
                             </a>
 
-                            <a class="w-full flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <a class="w-1/2 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Report
                          </a>
