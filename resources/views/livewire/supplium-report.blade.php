@@ -6,11 +6,35 @@
 
     <div class="flex justify-between mb-3">
         <div>
-            <x-button wire:click="$emit('openModal', 'download-report')" outline label="Download Report" class=" shadow-sm" />
+            <x-button icon="document-download" wire:click="$emit('openModal', 'download-report')" outline label="Report" class=" shadow-sm" />
         </div>
 
 
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
+            <x-select 
+            placeholder="Predict" 
+            :options="['2024']"
+            wire:model="predict" />
+
+            <span class="text-gray-200"> | </span>
+
+            @if(!is_null($predict))
+            <x-select 
+            disabled
+            placeholder="Month" 
+            :options="$getmonth"
+            option-label="month"
+            option-value="value"
+            wire:model="month" />
+
+            <x-select 
+            disabled
+            placeholder="Year" 
+            :options="$getyear"
+            option-label="year"
+            option-value="year"
+            wire:model="year" />
+            @else
             <x-select 
             placeholder="Month" 
             :options="$getmonth"
@@ -24,6 +48,7 @@
             option-label="year"
             option-value="year"
             wire:model="year" />
+            @endif
         </div>
 
     </div>

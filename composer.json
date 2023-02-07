@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.7",
         "league/csv": "^9.8",
         "livewire/livewire": "^2.10",
+        "php-ai/php-ml": "^0.10.0",
         "power-components/livewire-powergrid": "^3.5",
         "wire-elements/modal": "^1.0",
         "wireui/wireui": "^1.17"
