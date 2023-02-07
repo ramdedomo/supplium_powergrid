@@ -2,6 +2,7 @@
 
     <x-card title="Add Department">
         <p class="text-gray-600">
+            
 
             <x-errors class="mb-3" />
 
