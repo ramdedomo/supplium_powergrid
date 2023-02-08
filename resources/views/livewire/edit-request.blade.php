@@ -7,9 +7,8 @@
             @foreach ($requests as $item)
             <li class="flex p-3 bg-gray-100 mb-2 rounded-md border-b-2 border-gray-300">
                 <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                    <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg"
-                        alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
-                        class="cursor-pointer h-full w-full object-cover object-center">
+                    <img src="{{Storage::url($item['supply_photo'])}}"
+                    class="cursor-pointer h-full w-full object-cover object-center">
                 </div>
 
                 <div class="ml-4 flex flex-1 flex-col">

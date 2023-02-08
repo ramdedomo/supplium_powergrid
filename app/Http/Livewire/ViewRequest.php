@@ -153,6 +153,7 @@ class ViewRequest extends ModalComponent
 
         $count = 0;
         foreach($this->requests as $item){
+            $this->requests[$count]['supply_photo'] = Supply::find($item->supply_id)->supply_photo;
             $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
             $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
             $count++;

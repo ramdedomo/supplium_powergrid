@@ -42,7 +42,7 @@ class AddRequest extends ModalComponent
             case 5:
                 $receipt = Receipt::create([
                     'user_id' => $this->user,
-                    'supply_status' => 2,
+                    'supply_status' => 4,
                     'chair_at' => Carbon::now(),
                     'dean_at' => Carbon::now(),
                     'ced_at' => Carbon::now(),

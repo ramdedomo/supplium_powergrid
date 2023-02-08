@@ -38,7 +38,7 @@
 
     <div class="mt-2">
         <div class="p-2 bg-gray-100 rounded-lg mb-2 flex justify-end font-bold text-gray-800">
-            <x-button flat label="Report"  right-icon="arrow-circle-right" />
+            <x-button href="{{route('reports')}}" flat label="Report & Analysis"  right-icon="arrow-circle-right" />
         </div>
     </div>
 

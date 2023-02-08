@@ -13,28 +13,16 @@
         <div class="flex gap-2 items-center">
             <x-select 
             placeholder="Predict" 
-            :options="['2024']"
-            wire:model="predict" />
-
-            <span class="text-gray-200"> | </span>
-
-            @if(!is_null($predict))
-            <x-select 
-            disabled
-            placeholder="Month" 
-            :options="$getmonth"
-            option-label="month"
-            option-value="value"
-            wire:model="month" />
-
-            <x-select 
-            disabled
-            placeholder="Year" 
-            :options="$getyear"
+            :options="$getpredict"
             option-label="year"
             option-value="year"
-            wire:model="year" />
-            @else
+            wire:model="predict" />
+
+
+
+            @if(is_null($predict))
+            <span class="text-gray-200"> | </span>
+            
             <x-select 
             placeholder="Month" 
             :options="$getmonth"
