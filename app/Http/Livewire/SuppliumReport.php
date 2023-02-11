@@ -55,7 +55,7 @@ class SuppliumReport extends Component
                     $request_count_equipments = 0;
                     foreach ($user_department as $user) {
                         $receipts = Receipt::where('user_id', $user->id)
-                        ->whereYear('created_at', $year)
+                        ->whereYear('done_at', $year)
                         ->get(); 
         
                             foreach($receipts as $receipt){
@@ -77,8 +77,10 @@ class SuppliumReport extends Component
                 
                 foreach($supplies as $supply){
                     $query = Requests::where('supply_id', $supply->id)
-                    ->whereYear('created_at', $year)
-                    ->count();
+                    ->join('receipt', 'requests.receipt_id', '=', 'receipt.id')
+                    ->whereYear('receipt.done_at', $year)
+                    ->sum('quantity');
+                  
                     $test[$year][$supply->id] = $query;
                     $count++;
                 }
@@ -158,29 +160,30 @@ class SuppliumReport extends Component
             $supplies = Supply::all();
             foreach ($supplies as $supply) {
                $query = Requests::where('supply_id', $supply->id)
+               ->join('receipt', 'requests.receipt_id', '=', 'receipt.id')
                 ->when(empty($this->month), function ($query) {
-                    $query->whereMonth('created_at', Carbon::now()->month);
+                    $query->whereMonth('receipt.done_at', Carbon::now()->month);
                 })
                 ->when(empty($this->year), function ($query) {
-                    $query->whereYear('created_at', Carbon::now()->year);
+                    $query->whereYear('receipt.done_at', Carbon::now()->year);
                 })
                 ->when(!empty($this->year), function ($query) {
-                    $query->whereYear('created_at', $this->year);
+                    $query->whereYear('receipt.done_at', $this->year);
                 })
                 ->when(!empty($this->month), function ($query) {
                     if($this->month == 0){
                         if(empty($this->year)){
-                            $query->whereYear('created_at', Carbon::now()->year);
+                            $query->whereYear('receipt.done_at', Carbon::now()->year);
                         }else{
-                            $query->whereYear('created_at', $this->year);
+                            $query->whereYear('receipt.done_at', $this->year);
                         }
                     }else{
-                        $query->whereMonth('created_at', $this->month);
+                        $query->whereMonth('receipt.done_at', $this->month);
                     }
                 });
                 
-                $supply->request_count = $query->count();
-                $supply->request_total = $query->count()*$supply->supply_price;
+                $supply->request_count = $query->sum('quantity');
+                $supply->request_total = $query->sum('quantity')*$supply->supply_price;
                 $supply->total = $supply->request_count*$supply->supply_price;
             }
     
@@ -194,23 +197,23 @@ class SuppliumReport extends Component
                 foreach ($user_department as $user) {
                     $receipts = Receipt::where('user_id', $user->id)
                     ->when(empty($this->year), function ($query) {
-                        $query->whereYear('created_at', Carbon::now()->year);
+                        $query->whereYear('done_at', Carbon::now()->year);
                     })
                     ->when(!empty($this->year), function ($query) {
-                        $query->whereYear('created_at', $this->year);
+                        $query->whereYear('done_at', $this->year);
                     })
                     ->when(empty($this->month), function ($query) {
-                        $query->whereMonth('created_at', Carbon::now()->month);
+                        $query->whereMonth('done_at', Carbon::now()->month);
                     })
                     ->when(!empty($this->month), function ($query) {
                         if($this->month == 0){
                             if(empty($this->year)){
-                                $query->whereYear('created_at', Carbon::now()->year);
+                                $query->whereYear('done_at', Carbon::now()->year);
                             }else{
-                                $query->whereYear('created_at', $this->year);
+                                $query->whereYear('done_at', $this->year);
                             }
                         }else{
-                            $query->whereMonth('created_at', $this->month);
+                            $query->whereMonth('done_at', $this->month);
                         }
                     })
                     ->get(); 
@@ -221,7 +224,7 @@ class SuppliumReport extends Component
                             }else{
                                 $request_count_equipments += Requests::where('receipt_id', $receipt->id)->count();
                             }
-                            $request_count += Requests::where('receipt_id', $receipt->id)->count();
+                                $request_count += Requests::where('receipt_id', $receipt->id)->count();
                         }
                 }
             

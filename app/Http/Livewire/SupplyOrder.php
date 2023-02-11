@@ -50,6 +50,7 @@ class SupplyOrder extends ModalComponent
                 case 4:
 
                     $isnonteach = Department::find(Auth::user()->department)->nonteaching;
+
                     if($isnonteach == 0){
                         $receipt = Receipt::create([
                             'user_id' => Auth::user()->id,
@@ -62,6 +63,9 @@ class SupplyOrder extends ModalComponent
                             'receipt_id' => $receipt,
                             'quantity' => $this->quantity,
                         ]);
+
+                        //decrement stocks
+                        Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
     
                         Notifications::create([
                             'user_id' => Auth::user()->id,
@@ -96,6 +100,9 @@ class SupplyOrder extends ModalComponent
                             'receipt_id' => $receipt,
                             'quantity' => $this->quantity,
                         ]);
+
+                         //decrement stocks
+                         Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
     
                         Notifications::create([
                             'user_id' => Auth::user()->id,
@@ -135,6 +142,8 @@ class SupplyOrder extends ModalComponent
                         'quantity' => $this->quantity,
                     ]);
 
+                     //decrement stocks
+                     Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
 
                     Notifications::create([
                         'user_id' => Auth::user()->id,
@@ -186,9 +195,12 @@ class SupplyOrder extends ModalComponent
                         'quantity' => $this->quantity,
                     ]);
 
+                     //decrement stocks
+                     Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
+
                     Notifications::create([
                         'user_id' => Auth::user()->id,
-                        'receipt_id' => $receipt_equipments,
+                        'receipt_id' => $receipt,
                         'notification_type' => 105,
                         'is_supply' => 0
                     ]);   
@@ -276,6 +288,9 @@ class SupplyOrder extends ModalComponent
                         'receipt_id' => $receipt,
                         'quantity' => $this->quantity,
                     ]);
+
+                     //decrement stocks
+                     Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
                     
                     // Notifications::create([
                     //     'user_id' => Auth::user()->id,
@@ -359,6 +374,9 @@ class SupplyOrder extends ModalComponent
                 'supply_id' => $this->supply,
                 'quantity' => $this->quantity,
             ]);
+
+            //decrement stocks
+            Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
 
             Notifications::create([
                 'user_id' => Auth::user()->id,

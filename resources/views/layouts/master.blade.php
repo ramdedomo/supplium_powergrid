@@ -32,7 +32,7 @@
             placeholder="Password" />
 
         <div class="flex justify-between mt-3">
-            <x-button x-on:click="copytoClipboard()" icon="clipboard" label="Copy" />
+            <x-button x-on:click="copytoClipboard()" icon="clipboard" label="Copy Password" />
             <x-button x-on:click="genPassword()" label="Generate Random" />
         </div>
     </x-dialog>
@@ -105,13 +105,16 @@
                
                     <div class="flex flex-col space-y-0 w-full p-2">
                     <a href="#" class="rounded-lg flex justify-between w-full">
-                        <span class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline font-bold">Supplium</span>
+                        <span class="flex text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline font-bold">
+                            PSU-UCC
+                        </span>
+                        
                     </a>
                         <div class="text-xs flex items-center justify-between">
                             <div>Supply Inventory System</div>
 
                             <div>
-                               <a class="font-bold hover:text-amber-500 flex items-center cursor-pointer" onclick="Livewire.emit('openModal', 'supplium-devs')"> <x-icon name="user-group" class="w-3 h-3 mr-1" solid /> The Devs</a>
+                               <a class="font-bold hover:text-amber-300 flex items-center cursor-pointer text-gray-300" onclick="Livewire.emit('openModal', 'supplium-devs')"> <x-icon name="user-group" class="w-3 h-3 mr-1" solid /> The Devs</a>
                             </div>
                         </div>
                     </div>
@@ -353,8 +356,8 @@
                             href="{{ route('logout') }}">Logout</a>
 
 
-                        <div href="#"
-                            class="bg-gray-800 rounded-md p-2 text-white mb-4 flex space-x-3 border-b-4 border-amber-500 ">
+                        <div href="#" onclick="Livewire.emit('openModal', 'edit-user', {{ json_encode(['user' => $user_info->id]) }})"
+                            class="bg-gray-800 rounded-md p-2 cursor-pointer text-white mb-4 flex space-x-3 border-b-4 border-amber-500 ">
                             <div
                                 class="bg-white text-gray-800 font-bold font-sans rounded-md w-10 flex items-center justify-center text-2xl">
                                 {{ strtoupper(substr($user_info->firstname, 0, 1)) }}
@@ -369,9 +372,9 @@
                                     @elseif($user_info->user_type == 2)
                                         Dean
                                     @elseif($user_info->user_type == 3)
-                                        Chair
+                                        Chairman
                                     @elseif($user_info->user_type == 4)
-                                        User
+                                        User / Instructor
                                     @else
                                         Campus Executive Director
                                     @endif

@@ -59,13 +59,17 @@ class SuppliumBag extends Component
 
         //all request item have same receipt id
         foreach($supplies as $supply){
+            
             Requests::create([
                 'supply_id' => $supply['id'],
                 'receipt_id' => $receipt_supplies,
                 'quantity' => $supply['quantity'],
             ]);
 
+            //delete from bag
             Bag::where('user_id', Auth::user()->id)->where('supply_id', $supply['id'])->delete();
+            //decrement stocks
+            Supply::find($supply['id'])->decrement('supply_stocks', $supply['quantity']);
         }
 
     
@@ -115,7 +119,11 @@ class SuppliumBag extends Component
                                 'quantity' => $equipment['quantity'],
                             ]);
 
+                       
+                            //delete from bag
                             Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                            //decrement stocks
+                            Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
                         }
                     }else{
                         $receipt_equipments = Receipt::create([
@@ -133,7 +141,10 @@ class SuppliumBag extends Component
                                 'quantity' => $equipment['quantity'],
                             ]);
     
+                            //delete from bag
                             Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                            //decrement stocks
+                            Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
                         }
                     }
         
@@ -155,7 +166,10 @@ class SuppliumBag extends Component
                             'quantity' => $equipment['quantity'],
                         ]);
 
+                        //delete from bag
                         Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                        //decrement stocks
+                        Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
                     }
 
         
@@ -177,7 +191,10 @@ class SuppliumBag extends Component
                             'quantity' => $equipment['quantity'],
                         ]);
 
+                        //delete from bag
                         Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                        //decrement stocks
+                        Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
                     }
         
                     break;
@@ -200,7 +217,10 @@ class SuppliumBag extends Component
                             'quantity' => $equipment['quantity'],
                         ]);
 
+                        //delete from bag
                         Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                        //decrement stocks
+                        Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
                     }
         
                     break;

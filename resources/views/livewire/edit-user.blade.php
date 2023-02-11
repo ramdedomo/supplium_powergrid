@@ -18,16 +18,58 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <div class="text-sm text-amber-500">
-            Note: You cannot change CED <b>Department</b> and <b>Usertype</b>.
+                Note: Since this is the <b>Campus Executive Director</b> account you cannot change <b>UserType & Department</b>.
+            </div>
+        </div>
+        @endif
+
+                
+        @if($userdetails->user_type == 1)
+        <div class="mb-3 flex items-center p-4 border rounded-lg gap-x-3 dark:border-0 shadow-soft bg-amber-50">
+            <svg class="flex-shrink-0 w-5 h-5 text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="text-sm text-amber-500">
+            Note: Since this account is the <b>Admin (Supply Office)</b> account you cannot change <b>UserType & Department</b>.
+            </div>
+        </div>
+        @endif
+
+        @if(
+        ($userdetails->user_type == 2 || 
+        $userdetails->user_type == 3 ||
+        $userdetails->user_type == 4) && 
+        (Auth::user()->user_type == 2 ||
+        Auth::user()->user_type == 3 ||
+        Auth::user()->user_type == 4)
+        )
+        <div class="mb-3 flex items-center p-4 border rounded-lg gap-x-3 dark:border-0 shadow-soft bg-amber-50">
+            <svg class="flex-shrink-0 w-5 h-5 text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="text-sm text-amber-500">
+            Note: If <b>Department or UserType</b> is incorrect you  may go to <b>Supply Office</b> and request changes.
             </div>
         </div>
         @endif
 
         @if($usertype != 5)
-        <x-select wire:model="usertype" class="w-full mb-3" right-icon="collection" label="User Type"
+            @if($userdetails->user_type != 1 && Auth::user()->user_type == 1)
+            <x-select wire:model="usertype" class="w-full mb-3" right-icon="collection" label="User Type"
             placeholder="Select" :options='$usertype_' option-label="role" option-value="user_type" />
+            @else
+            <x-input right-icon="collection" class="grid-cols-1 mb-3"
+            label="User Type" disabled placeholder="
+                @if (Auth::user()->user_type == 1)Supply Administrator
+                @elseif(Auth::user()->user_type == 2)Dean
+                @elseif(Auth::user()->user_type == 3)Chair
+                @elseif(Auth::user()->user_type == 4)User / Instructor
+                @else Campus Executive Director
+                @endif
+            "/>
+            @endif
         @else
-        <x-input right-icon="collection" class="grid-cols-1"
+        <x-input right-icon="collection" class="grid-cols-1 mb-3"
         label="User Type" disabled placeholder="Campus Executive Director"/>
         @endif
 
@@ -39,7 +81,7 @@
                 placeholder="" />
 
             @if($usertype != 5)
-                @if (Auth::user()->user_type == 1)
+                @if($userdetails->user_type != 1 && Auth::user()->user_type == 1)
                         <x-select class="grid-cols-1" wire:model="department" right-icon="user-group" label="Department"
                             placeholder="Department" :options='$department_' option-label="department_short"
                             option-value="department" option-description="nonteaching" hide-empty-message>
@@ -67,8 +109,14 @@
                 option-value="department"
                 /> --}}
                 @else
+                    @if($userdetails->user_type == 1)
+                    <x-input placeholder="Main" right-icon="user-group" class="grid-cols-1"
+                    label="Department" disabled />
+                    @else
                     <x-input wire:model="department_.department" right-icon="user-group" class="grid-cols-1"
-                        label="Department" disabled />
+                    label="Department" disabled />
+                    @endif
+
                 @endif
             @else
                     <x-input placeholder="Not Required" right-icon="user-group" class="grid-cols-1"

@@ -2,14 +2,13 @@
     
     <div class="h-screen flex justify-center items-center">
         <div>
-            <div class="text-center p-2 my-3 space-y-3">
-                <span class="flex justify-center">
-                    <span
-                        class="text-3xl font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">Supplium</span>
-                    <img width="35px" src="{{ asset('images/HeadSupplium.png') }}" alt="">
+            <div class="text-center p-2 my-3 space-y-5">
+                <span>
+                    <span class="text-2xl font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">PSU-URDANETA CAMPUS</span>
+                    <div class="text-xs font-mono">Supply Inventory System</div>
                 </span>
 
-                <p><strong>Welcome back!</strong> Please login to continue.</p>
+                <p>Welcome back! please login to continue.</p>
             </div>
 
 
@@ -32,6 +31,10 @@
                 
             </form>
 
+            <div class="flex justify-center my-3 text-2xs">
+                <span class="text-gray-300"> Powered by <span class="font-bold cursor-pointer hover:text-amber-300" wire:click="$emit('openModal', 'supplium-devs')">Supplium</span>  </span>
+            </div>
+      
 
         </div>
     </div>

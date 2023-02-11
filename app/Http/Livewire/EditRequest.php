@@ -14,6 +14,7 @@ use Request;
 use Carbon\Carbon;
 use App\Models\Notifications;
 use App\Models\Messages;
+use Barryvdh\DomPDF\Facade\Pdf;
 class EditRequest extends ModalComponent
 {
 
@@ -23,6 +24,74 @@ class EditRequest extends ModalComponent
     public static function modalMaxWidth(): string
     {
         return '2xl';
+    }
+
+    public function getreceipt(){
+        $this->receipt = Receipt::where('receipt.id', $this->request)
+        ->join('status', 'receipt.supply_status', '=', 'status.status')
+        ->first();
+
+        if($this->receipt->is_supply == 1){
+            $this->requests = Receipt::where('receipt.id', $this->request)
+            ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+            ->get();
+    
+            $count = 0;
+            foreach($this->requests as $item){
+                $this->requests[$count]['supply_price'] = Supply::find($item->supply_id)->supply_price;
+                $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
+                $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
+                $count++;
+            }
+    
+            $userdetails = User::where('id', $this->receipt->user_id)
+            ->join('department_type', 'user.department', '=', 'department_type.department')
+            ->join('user_type', 'user.user_type', '=', 'user_type.user_type')
+            ->select('user.*', 'user_type.role as usertype', 'department_type.department_description as userdepartment')
+            ->first();
+    
+            $pdfContent = PDF::loadView('pdf', [
+                'requests' => $this->requests,
+                'receipt' => $this->receipt,
+                'user_details' => $userdetails
+            ])->output();
+    
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "#".$this->request."_receipt.pdf"
+            );
+        }else{
+            $this->requests = Receipt::where('receipt.id', $this->request)
+            ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+            ->get();
+    
+            $count = 0;
+            foreach($this->requests as $item){
+                $this->requests[$count]['supply_price'] = Supply::find($item->supply_id)->supply_price;
+                $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
+                $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
+                $count++;
+            }
+    
+            $userdetails = User::where('id', $this->receipt->user_id)
+            ->join('department_type', 'user.department', '=', 'department_type.department')
+            ->join('user_type', 'user.user_type', '=', 'user_type.user_type')
+            ->select('user.*', 'user_type.role as usertype', 'department_type.department_description as userdepartment')
+            ->first();
+    
+            $pdfContent = PDF::loadView('par', [
+                'requests' => $this->requests,
+                'receipt' => $this->receipt,
+                'user_details' => $userdetails
+            ])->output();
+    
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "#".$this->request."_receipt.pdf"
+            );
+        }
+
+    
     }
 
     public function accept_confirm(){
@@ -35,11 +104,6 @@ class EditRequest extends ModalComponent
             switch ($this->receipt->supply_status) {
                 case 0:
                     $status = 4;
-    
-                    $supplies = Requests::where('receipt_id', $this->request)->get();
-                    foreach($supplies as $supply){
-                        Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
-                    }
           
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
@@ -76,13 +140,6 @@ class EditRequest extends ModalComponent
              
                     break;
                 case 4:
-                    
-                    $supplies = Requests::where('receipt_id', $this->request)->get();
-                    foreach($supplies as $supply){
-                        Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
-
-                    }
-
                     $status = 5;
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
@@ -103,10 +160,9 @@ class EditRequest extends ModalComponent
                     ]);
 
                     break;
-              }
+            }
 
         }else{
-
 
             switch ($this->receipt->supply_status) {
                 case 0:
@@ -169,7 +225,7 @@ class EditRequest extends ModalComponent
                     break;
 
                 case 2:
-                    $status = 4;
+                    $status = 3;
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
                         'ced_at' => Carbon::now()
@@ -178,7 +234,7 @@ class EditRequest extends ModalComponent
                     Notifications::create([
                         'user_id' => $exists->user_id,
                         'receipt_id' => $exists->receipt_id,
-                        'notification_type' => 4,
+                        'notification_type' => 103,
                         'is_supply' => 0
                     ]);   
 
@@ -194,63 +250,42 @@ class EditRequest extends ModalComponent
                         'receipt_id' => $exists->receipt_id,
                         'message_type' => 8
                     ]);
+                    break;
+                case 3:
+                    $status = 4;
+                    Receipt::where('id', $this->request)->update([
+                        'supply_status' => $status,
+                        'supply_at' => Carbon::now()
+                    ]);
 
+                    Notifications::create([
+                        'user_id' => $exists->user_id,
+                        'receipt_id' => $exists->receipt_id,
+                        'notification_type' => 4,
+                        'is_supply' => 0
+                    ]);   
+
+                    Notifications::create([
+                        'user_id' => $exists->user_id,
+                        'receipt_id' => $exists->receipt_id,
+                        'notification_type' => 3,
+                        'is_supply' => 0
+                    ]);   
+     
                     Messages::create([
                         'user_id' => Auth::user()->id,
                         'receipt_id' => $exists->receipt_id,
                         'message_type' => 4
                     ]);
+
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $exists->receipt_id,
+                        'message_type' => 3
+                    ]);
+
                     break;
                 case 4:
-
-                    $supplies = Requests::where('receipt_id', $this->request)->get();
-                    foreach($supplies as $supply){
-                        Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
-                        $stocks = Supply::find($supply->supply_id)->supply_stocks;
-       
-                        if($stocks < 20 && $stocks >= 10){
-        
-                            Notifications::create([
-                                'user_id' => $exists->user_id,
-                                'receipt_id' => $exists->receipt_id,
-                                'notification_type' => 220,
-                                'is_supply' => 0
-                            ]);
-        
-                            if($stocks < 10 && $stocks >= 5){
-        
-                                Notifications::create([
-                                    'user_id' => $exists->user_id,
-                                    'receipt_id' => $exists->receipt_id,
-                                    'notification_type' => 210,
-                                    'is_supply' => 0
-                                ]);
-        
-                                if($stocks < 5 && $stocks >= 1){
-        
-                                    Notifications::create([
-                                        'user_id' => $exists->user_id,
-                                        'receipt_id' => $exists->receipt_id,
-                                        'notification_type' => 205,
-                                        'is_supply' => 0
-                                    ]);
-        
-                                    if($stocks == 0){
-        
-                                        Notifications::create([
-                                            'user_id' => $exists->user_id,
-                                            'receipt_id' => $exists->receipt_id,
-                                            'notification_type' => 200,
-                                            'is_supply' => 0
-                                        ]);
-                
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
                     $status = 5;
                     Receipt::where('id', $this->request)->update([
                         'supply_status' => $status,
@@ -293,7 +328,6 @@ class EditRequest extends ModalComponent
         }
 
 
-
         $this->closeModal();
         $this->emit('itemUpdated');
 
@@ -334,10 +368,16 @@ class EditRequest extends ModalComponent
     }
 
     public function cancel_confirm(){
+        //todo: return the decremented value
         Receipt::where('id', $this->request)->update([
             'supply_status' => 7,
             'canceled_at' => Carbon::now()
         ]);
+
+        $supplies = Requests::where('receipt_id', $this->request)->get();
+        foreach($supplies as $supply){
+            Supply::find($supply->supply_id)->increment('supply_stocks', $supply->quantity);
+        }
 
         $exists = Notifications::where('receipt_id', $this->request)->first();
         
@@ -395,6 +435,7 @@ class EditRequest extends ModalComponent
 
         $count = 0;
         foreach($this->requests as $item){
+            $this->requests[$count]['supply_photo'] = Supply::find($item->supply_id)->supply_photo;
             $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
             $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
             $count++;

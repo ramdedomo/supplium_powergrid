@@ -100,7 +100,7 @@
         <x-inputs.password id='password' wire:model='password' label="Enter Password:" placeholder="Password" />
 
         <div class="flex justify-between mt-3">
-            <x-button x-on:click="pw_copytoClipboard()" icon="clipboard" label="Copy" />
+            <x-button x-on:click="pw_copytoClipboard()" icon="clipboard" label="Copy Password" />
             <x-button x-on:click="pw_genPassword()" label="Generate Random" />
         </div>
 

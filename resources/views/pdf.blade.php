@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>#{{$receipt_id}} Receipt</title>
+    <title>#{{$receipt->id}} Receipt</title>
 
     <style type="text/css">
         * {
@@ -32,21 +32,28 @@
     <tr>
         <td valign="top"></td>
         <td align="right">
-            <div style="border-left-style: solid; border-width: 10px; border-color: gold;">
+            <div style="text-align: center; margin-bottom: 10px;">
                 <h3>Pangasinan State University - Urdaneta Campus</h3>
+                   
+                <div>
+                  Supplium - Supply Inventory System
+                </div>
+                <div>
+                  Date Completed: <b>{{ date_format(Carbon\Carbon::parse($receipt->done_at), 'M/d h:i A') }}</b>
+                </div>
             </div>
-   
-            <p>Supplium - Supply Inventory System</p>
+
             <pre>
                 {{$user_details->firstname. ' '.$user_details->lastname}}
                 {{$user_details->userdepartment}}
                 {{$user_details->usertype}}
-                <b>#{{$receipt_id}}</b>
+                <b>#{{$receipt->id}}</b>
             </pre>
         </td>
     </tr>
 
   </table>
+
 
 
 

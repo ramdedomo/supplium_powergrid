@@ -37,13 +37,6 @@ class ViewRequest extends ModalComponent
             'done_at' => Carbon::now()
         ]);
 
-        $supplies = Requests::where('receipt_id', $this->request)->get();
-        foreach($supplies as $supply){
-            Supply::find($supply->supply_id)->decrement('supply_stocks', $supply->quantity);
-        }
-
-
-
         $exists = Notifications::where('receipt_id', $this->request)->first();
         
         Notifications::create([
@@ -93,6 +86,11 @@ class ViewRequest extends ModalComponent
             'supply_status' => 7,
             'canceled_at' => Carbon::now()
         ]);
+
+        $supplies = Requests::where('receipt_id', $this->request)->get();
+        foreach($supplies as $supply){
+            Supply::find($supply->supply_id)->increment('supply_stocks', $supply->quantity);
+        }
 
         $exists = Notifications::where('receipt_id', $this->request)->first();
         
@@ -167,33 +165,102 @@ class ViewRequest extends ModalComponent
         ->join('status', 'receipt.supply_status', '=', 'status.status')
         ->first();
 
-        $this->requests = Receipt::where('receipt.id', $this->request)
-        ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
-        ->get();
+        if($this->receipt->is_supply == 1){
+            $this->requests = Receipt::where('receipt.id', $this->request)
+            ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+            ->get();
+    
+            $count = 0;
+            foreach($this->requests as $item){
+                $this->requests[$count]['supply_price'] = Supply::find($item->supply_id)->supply_price;
+                $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
+                $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
+                $count++;
+            }
+    
+            $userdetails = User::where('id', $this->receipt->user_id)
+            ->join('department_type', 'user.department', '=', 'department_type.department')
+            ->join('user_type', 'user.user_type', '=', 'user_type.user_type')
+            ->select('user.*', 'user_type.role as usertype', 'department_type.department_description as userdepartment')
+            ->first();
+    
+            $pdfContent = PDF::loadView('pdf', [
+                'requests' => $this->requests,
+                'receipt' => $this->receipt,
+                'user_details' => $userdetails
+            ])->output();
+    
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "#".$this->request."_receipt.pdf"
+            );
+        }elseif($this->receipt->is_supply == 2){
+            $this->requests = Receipt::where('receipt.id', $this->request)
+            ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+            ->get();
+    
+            $count = 0;
+            foreach($this->requests as $item){
+                $this->requests[$count]['supply_price'] = Supply::find($item->supply_id)->supply_price;
+                $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
+                $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
+                $count++;
+            }
+    
+            $userdetails = User::where('id', $this->receipt->user_id)
+            ->join('department_type', 'user.department', '=', 'department_type.department')
+            ->join('user_type', 'user.user_type', '=', 'user_type.user_type')
+            ->select('user.*', 'user_type.role as usertype', 'department_type.department_description as userdepartment')
+            ->first();
+    
+            $pdfContent = PDF::loadView('par', [
+                'requests' => $this->requests,
+                'receipt' => $this->receipt,
+                'user_details' => $userdetails
+            ])->output();
+    
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "#".$this->request."_receipt.pdf"
+            );
+        }else{
+            $this->requests = Receipt::where('receipt.id', $this->request)
+            ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+            ->get();
+    
+            $supply_list = [];
+            $equipment_list = [];
 
-        $count = 0;
-        foreach($this->requests as $item){
-            $this->requests[$count]['supply_name'] = Supply::find($item->supply_id)->supply_name;
-            $this->requests[$count]['supply_type'] = (Supply::find($item->supply_id)->supply_type == 0) ? "Supply" : "Equipments";
-            $count++;
+            foreach($this->requests as $item){
+                if(Supply::find($item->supply_id)->supply_type == 0){
+                    $supply_list[] = [
+                       'supply' => Supply::find($item->supply_id),
+                       'qty' => $item->quantity
+                    ];
+                }else{
+                    $equipment_list[] = [
+                        'supply' => Supply::find($item->supply_id),
+                        'qty' => $item->quantity
+                     ];
+                }
+            }
+
+            //todo: edit ppmp pdf content
+            $pdfContent = PDF::loadView('ppmp', [
+                'supplies' => $supply_list,
+                'equipments' => $equipment_list,
+                'receipt' => "#".$this->request."_ppmp.pdf"
+            ])->setPaper('a4', 'landscape')->output();
+
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "#".$this->request."_ppmp.pdf"
+            );
+
+
         }
 
-        $userdetails = User::where('id', $this->receipt->user_id)
-        ->join('department_type', 'user.department', '=', 'department_type.department')
-        ->join('user_type', 'user.user_type', '=', 'user_type.user_type')
-        ->select('user.*', 'user_type.role as usertype', 'department_type.department_description as userdepartment')
-        ->first();
-
-        $pdfContent = PDF::loadView('pdf', [
-            'requests' => $this->requests,
-            'receipt_id' => $this->request,
-            'user_details' => $userdetails
-        ])->output();
-
-        return response()->streamDownload(
-            fn () => print($pdfContent),
-            "#".$this->request."_receipt.pdf"
-        );
+    
     }
    
     public function DownloadNotes() { 
