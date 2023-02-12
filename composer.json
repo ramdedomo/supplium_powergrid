@@ -15,7 +15,7 @@
         "livewire/livewire": "^2.10",
         "php-ai/php-ml": "^0.10.0",
         "power-components/livewire-powergrid": "^3.5",
-        "wire-elements/modal": "^1.0",
+        "wire-elements/modal": "dev-master",
         "wireui/wireui": "^1.17"
     },
     "require-dev": {
@@ -68,6 +68,12 @@
             "pestphp/pest-plugin": true
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/wire-elements"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
