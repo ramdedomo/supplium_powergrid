@@ -2,7 +2,7 @@
 const colors = require('tailwindcss/colors')
 module.exports = {
   content: [
-    './vendor/wire-elements/modal/resources/views/*.blade.php',
+    // './vendor/wire-elements/modal/resources/views/*.blade.php',
     './storage/framework/views/*.php',
     './resources/views/**/*.blade.php',
     "./resources/**/*.blade.php",
