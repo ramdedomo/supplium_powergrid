@@ -6,8 +6,8 @@
     "license": "MIT",
     "repositories": [
         {
-            "type": "path",
-            "url": "./packages/wire-elements"
+            "type": "vcs",
+            "url": "https://github.com/ramdedomo/wire-modal.git"
         }
     ],
     "require": {
@@ -21,7 +21,7 @@
         "livewire/livewire": "^2.10",
         "php-ai/php-ml": "^0.10.0",
         "power-components/livewire-powergrid": "^3.5",
-        "wire-elements/modal": "dev-main",
+        "wire-elements/modal": "dev-bugfix",
         "wireui/wireui": "^1.17"
     },
     "require-dev": {
@@ -38,8 +38,7 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Collective\\Html\\": "packages/wire-elements/modal/src"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
