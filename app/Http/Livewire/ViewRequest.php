@@ -194,7 +194,7 @@ class ViewRequest extends ModalComponent
                 fn () => print($pdfContent),
                 "#".$this->request."_receipt.pdf"
             );
-        }elseif($this->receipt->is_supply == 2){
+        }elseif($this->receipt->is_supply == 0){
             $this->requests = Receipt::where('receipt.id', $this->request)
             ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
             ->get();

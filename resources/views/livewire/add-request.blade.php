@@ -5,10 +5,30 @@
 
             <x-errors class="mb-3" />
 
+            <div class="mb-3 py-2 px-4 rounded-md border-gray-200 border-2 bg-gray-100 font-mono text-center text-sm text-gray-500">
+            @if(empty($supply)) 
+                Selected items will display here. Try to select some items.
+            @endif
+
+           @php
+                $count = 1;
+            @endphp
+            @foreach ($supply as $s)
+            
+                {{$count}}. {{App\Models\Supply::find($s)->supply_name}} - ({{App\Models\Supply::find($s)->supply_unit}}) / 
+            @php
+                $count++;
+            @endphp
+            @endforeach
+
+            </div>
+
+         
+
                         
             <div class="mb-2">
                 <x-select
-                multiselect
+                    multiselect
                     class="col-span-2 w-full"
                     label="Select Item"
                     placeholder="Select Item"

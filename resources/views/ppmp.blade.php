@@ -36,7 +36,7 @@
         <td valign="top"></td>
         <td align="center">
             <div style="margin-bottom: 50px;">
-                <h3>PROJECT PROCUREMENT MANAGEMENT PLAN (PPMP)</h3>
+                <h3>PROJECT PROCUREMENT MANAGEMENT PLAN (PPMP) {{Carbon\Carbon::now()->year}}</h3>
             </div>
         </td>
     </tr>
@@ -87,7 +87,7 @@
             <td class="tablemain" align="center"></td>
             <td class="tablemain" align="center">{{$supply['supply']->id}}</td>
             <td class="tablemain" align="center">{{$supply['supply']->supply_name}}</td>
-            <td class="tablemain" align="center"></td>
+            <td class="tablemain" align="center">{{$supply['supply']->supply_unit}}</td>
             <td class="tablemain" align="center">{{$supply['qty']}}</td>
             <td class="tablemain" align="center">{{$supply['qty']*$supply['supply']->supply_price}}</td>
             <td class="tablemain" align="center"></td>
@@ -115,7 +115,7 @@
           <td class="tablemain" align="center"></td>
           <td class="tablemain" align="center">{{$equipment['supply']->id}}</td>
           <td class="tablemain" align="center">{{$equipment['supply']->supply_name}}</td>
-          <td class="tablemain" align="center"></td>
+          <td class="tablemain" align="center">{{$equipment['supply']->supply_unit}}</td>
           <td class="tablemain" align="center">{{$equipment['qty']}}</td>
           <td class="tablemain" align="center">{{$equipment['qty']*$equipment['supply']->supply_price}}</td>
           <td class="tablemain" align="center"></td>

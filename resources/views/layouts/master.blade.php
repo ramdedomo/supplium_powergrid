@@ -135,6 +135,7 @@
                 </button>
             </div>
 
+
             <div class="mt-2 text-center py-2 font-bold bg-gray-100 border-l-4 border-amber-500">
                 @if(Auth::user()->department == 0)
                     @if(Auth::user()->user_type == 5)
@@ -155,6 +156,10 @@
                 @endif
             </div>
 
+            <div class="flex mt-1 p-1 justify-center text-xs font-mono bg-gray-100">
+                <p id="time">{{Carbon\Carbon::now()->format('m/d/Y - g:i:s A')}}</p>
+            </div>
+      
             <nav :class="{ 'block': open, 'hidden': !open }" class="flex-grow md:block md:pb-0 md:overflow-y-auto mt-5">
                 <div class="flex flex-col w-full h-full px-4">
                     <span class="mb-5">
@@ -206,10 +211,18 @@
                             </a>
                         </div>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                                href="{{route('list')}}">
-                                <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
-                            </a>
+                        <div class="flex gap-2">
+                            <a class="flex block  w-1/2  px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            href="{{route('list')}}">
+                            <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
+                        </a>
+
+                        <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                        href="{{route('bag')}}">
+                        <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
+                         </a>
+                        </div>
+                         
 
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('requests')}}">
@@ -221,10 +234,7 @@
                                 <x-icon name="paper-airplane" class="w-5 h-5 mr-2" /> Requested Items
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                            href="{{route('bag')}}">
-                            <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
-                        </a>
+               
 
                         <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                         href="{{route('reports')}}">
@@ -243,30 +253,37 @@
                             </a>
                         </div>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                                href="{{ route('users') }}">
-                                <x-icon name="users" class="w-5 h-5 mr-2" /> Users
-                            </a>
+                            <div class="flex gap-2">
+                                <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                    href="{{ route('users') }}">
+                                    <x-icon name="users" class="w-5 h-5 mr-2" /> Users
+                                </a>
+                                
+                                <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                    href="{{route('requests')}}">
+                                    <x-icon name="inbox" class="w-5 h-5 mr-2" /> Requests
+                                </a>
+                            </div>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <div class="flex gap-2">
+                                <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('list')}}">
                                 <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
-                            </a>
+                                </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                                href="{{route('requests')}}">
-                                <x-icon name="inbox" class="w-5 h-5 mr-2" /> Requests
-                            </a>
+                            
+                                <a class="flex block  w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{route('bag')}}">
+                                <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
+                                </a>
+                            </div>
+
 
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('myrequests')}}">
                                 <x-icon name="paper-airplane" class="w-5 h-5 mr-2" /> Requested Items
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                            href="{{route('bag')}}">
-                            <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
-                        </a>
 
                         <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                         href="{{route('reports')}}">
@@ -286,31 +303,37 @@
                             </a>
                         </div>
             
+                            <div class="flex gap-2">
+                                <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                    href="{{ route('users') }}">
+                                    <x-icon name="users" class="w-5 h-5 mr-2" /> Users
+                                </a>
+                                
+                                <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                    href="{{route('requests')}}">
+                                    <x-icon name="inbox" class="w-5 h-5 mr-2" /> Requests
+                                </a>
+                            </div>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                                href="{{ route('users') }}">
-                                <x-icon name="users" class="w-5 h-5 mr-2" /> Users
-                            </a>
-
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                            <div class="flex gap-2">
+                                <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('list')}}">
                                 <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
-                            </a>
+                                </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                                href="{{route('requests')}}">
-                                <x-icon name="inbox" class="w-5 h-5 mr-2" /> Requests
-                            </a>
+                                <a class="flex block  w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                href="{{route('bag')}}">
+                                <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
+                                </a>
+                            </div>
+                 
+
 
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('myrequests')}}">
                                 <x-icon name="paper-airplane" class="w-5 h-5 mr-2" /> Requested Items
                             </a>
 
-                            <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
-                            href="{{route('bag')}}">
-                            <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
-                        </a>
 
                         <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                             href="{{route('reports')}}">
@@ -395,13 +418,22 @@
 
 
 
-        <div class="lg:w-4/5 md:w-3/4 sm:w-full p-4">
-
+        <div class="lg:w-4/5 md:w-3/4 sm:w-full p-4 overflow-hidden">
             {{ $slot }}
         </div>
 
     </div>
 
+
+    <script>
+        var timeDisplay = document.getElementById("time");
+        function refreshTime() {
+        var dateString = new Date().toLocaleString("en-US", {timeZone: "Asia/Manila"});
+        var formattedString = dateString.replace(", ", " - ");
+        timeDisplay.innerHTML = formattedString;
+        }
+        setInterval(refreshTime, 1000);
+    </script>
 
     @livewireScripts
     @livewire('livewire-ui-modal')

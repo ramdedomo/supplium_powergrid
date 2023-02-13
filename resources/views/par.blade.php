@@ -98,7 +98,7 @@
           <div style="text-align: left; margin: 10px;">Issued By:</div>
           <div style="margin-bottom: 10px;">
             <div><u>{{strtoupper(App\Models\User::where('user_type', 1)->first()->firstname." ".App\Models\User::where('user_type', 1)->first()->lastname)}}</u></div>
-            <div style="font-weight: 400; font-size: 9px;">Signature over printer name of End User</div>
+            <div style="font-weight: 400; font-size: 9px;">Signature over printer name of Supply and/or Property</div>
             <div><u>Supply Office</u></div>
             <div style="font-weight: 400; font-size: 9px;">Position / Office</div>
             <div style="font-weight: 400;"><u>{{ date_format(Carbon\Carbon::parse($receipt->done_at), 'm/Y/d') }}</u></div>

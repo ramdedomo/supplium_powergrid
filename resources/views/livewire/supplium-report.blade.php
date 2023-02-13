@@ -60,7 +60,7 @@
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-2 text-left">
                               
                                     <div class="flex">
-                                        No. of Request
+                                        No. of Request/Quantity
                                         <span x-on:mouseover="tooltip = true" x-on:mouseleave="tooltip = false"
                                         class="ml-2 h-5 w-5 cursor-pointer" x-data="{ tooltip: false }">
     

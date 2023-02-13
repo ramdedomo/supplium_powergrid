@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\Notifications;
 use App\Models\Bag;
+use App\Models\Supply;
 use App\Models\Requests;
 use App\Models\Receipt;
 use Livewire\WithPagination;

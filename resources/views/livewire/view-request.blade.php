@@ -66,7 +66,7 @@
         <div class="bg-green-200 outline-1 text-green-800 outline-green-400 text-center outline rounded-md justify-center mb-3 p-3">
             <div class="flex items-center justify-center">
                 <x-icon name="information-circle" class="w-5 h-5 mr-3" /> 
-                This Request is Completed <x-button wire:click="getreceipt" 2xs icon="receipt-tax" emerald label="Receipt"/>
+                This Request is Completed  &nbsp;<x-button wire:click="getreceipt" 2xs icon="receipt-tax" emerald label="Receipt"/>
             </div>
         </div>
         @endif
@@ -173,7 +173,7 @@
         <div class="bg-green-200 outline-1 text-green-800 outline-green-400 text-center outline rounded-md justify-center mb-3 p-3">
             <div class="flex items-center justify-center">
                 <x-icon name="information-circle" class="w-5 h-5 mr-3" /> 
-                This Request is Completed <x-button wire:click="getreceipt" 2xs icon="receipt-tax" emerald label="Receipt"/>
+                This Request is Completed &nbsp;<x-button wire:click="getreceipt" 2xs icon="receipt-tax" emerald label="Receipt"/>
             </div>
         </div>
         @endif

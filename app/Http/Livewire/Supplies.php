@@ -115,7 +115,7 @@ final class Supplies extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('supply_type')
             ->addColumn('supply_name')
-
+            ->addColumn('supply_unit')
             ->addColumn('supply_color')
 
            /** Example of custom column using a closure **/
@@ -179,7 +179,7 @@ final class Supplies extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('DESCRIPTION', 'supply_desc')
+            Column::make('UNIT/MEASUREMENT', 'supply_unit')
                 ->searchable(),
 
             Column::make('CREATED', 'created_at')

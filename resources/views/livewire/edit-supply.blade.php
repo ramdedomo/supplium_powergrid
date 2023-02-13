@@ -3,12 +3,12 @@
         <x-card title="Edit {{$supply_details->supply_name}}">
             <p class="text-gray-600">
 
-                <div class="flex gap-3">
-                    <x-input wire:model.defer="itemname" right-icon="document" class="mb-3 w-full" label="Name" placeholder="" />
-                    <x-color-picker wire:model.defer="itemcolor" class="w-full" label="Select Color" placeholder="Select Color" />
+                <div class="grid grid-cols-3 gap-3 mb-3">
+                    <x-input wire:model.defer="itemname" right-icon="document" class="grid-cols-1" label="Name" placeholder="" />
+                    <x-color-picker wire:model.defer="itemcolor" class="grid-cols-1" label="Select Color" placeholder="Select Color" />
+                    <x-input wire:model.defer="itemunit" right-icon="archive" class="grid-cols-1" label="Unit" placeholder="Ex. Box, Ream" />
                 </div>
            
-
                 <div class="grid grid-cols-4 mb-3 gap-3 p-4 bg-gray-50 border-2 border-gray-200 rounded-lg">
                     <div class="col-span-3">
                         <x-input wire:model="itemphoto" type="file" label="Supply Photo (Optional)"/>

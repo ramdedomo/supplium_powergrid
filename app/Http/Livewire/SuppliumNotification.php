@@ -151,6 +151,9 @@ class SuppliumNotification extends Component
             ->select('user.*', 'notifications.*','notifications.created_at as timecreated')
             ->orderBy('notifications.created_at', 'DESC')
             ->paginate(7);
+
+            return view('livewire.supplium-notification', ['notifications' => $notifications]);
+
         }
 
      

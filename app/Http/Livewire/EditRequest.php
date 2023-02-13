@@ -60,7 +60,7 @@ class EditRequest extends ModalComponent
                 fn () => print($pdfContent),
                 "#".$this->request."_receipt.pdf"
             );
-        }else{
+        }elseif($this->receipt->is_supply == 0){
             $this->requests = Receipt::where('receipt.id', $this->request)
             ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
             ->get();
@@ -89,6 +89,41 @@ class EditRequest extends ModalComponent
                 fn () => print($pdfContent),
                 "#".$this->request."_receipt.pdf"
             );
+        }else{
+            $this->requests = Receipt::where('receipt.id', $this->request)
+            ->join('requests', 'receipt.id', '=', 'requests.receipt_id')
+            ->get();
+    
+            $supply_list = [];
+            $equipment_list = [];
+
+            foreach($this->requests as $item){
+                if(Supply::find($item->supply_id)->supply_type == 0){
+                    $supply_list[] = [
+                       'supply' => Supply::find($item->supply_id),
+                       'qty' => $item->quantity
+                    ];
+                }else{
+                    $equipment_list[] = [
+                        'supply' => Supply::find($item->supply_id),
+                        'qty' => $item->quantity
+                     ];
+                }
+            }
+
+            //todo: edit ppmp pdf content
+            $pdfContent = PDF::loadView('ppmp', [
+                'supplies' => $supply_list,
+                'equipments' => $equipment_list,
+                'receipt' => "#".$this->request."_ppmp.pdf"
+            ])->setPaper('a4', 'landscape')->output();
+
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "#".$this->request."_ppmp.pdf"
+            );
+
+
         }
 
     

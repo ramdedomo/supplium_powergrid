@@ -20,6 +20,7 @@ class EditSupply extends ModalComponent
     public $supply;
     public $itemphoto;
     public $itemcolor;
+    public $itemunit;
 
 
     public function mount($supply)
@@ -33,6 +34,7 @@ class EditSupply extends ModalComponent
         $this->itemstocks = $this->supply_details->supply_stocks;
         $this->itemcategory = ($this->supply_details->supply_type == 0) ? "Supply" : "Equipments";
         $this->itemcolor = $this->supply_details->supply_color;
+        $this->itemunit = $this->supply_details->supply_unit;
         $this->currentphoto = $this->supply_details->supply_photo;
         $this->itemprice = $this->supply_details->supply_price;
     }
@@ -43,6 +45,7 @@ class EditSupply extends ModalComponent
         return [
             'itemname' => 'required',
             'itemstocks' => 'required|numeric|gt:0',
+            'itemunit' => 'required',
             'itemcategory' => 'required',
             'itemcolor' => 'required',
             'itemprice' => 'required|numeric'
@@ -90,7 +93,8 @@ class EditSupply extends ModalComponent
                 'supply_stocks' => $this->itemstocks,
                 'supply_type' => ($this->itemcategory == "Supply") ? 0 : 1,
                 'supply_color' => $this->itemcolor,
-                'supply_photo' => $photo
+                'supply_photo' => $photo,
+                'supply_unit' => $this->itemunit
             ]);
 
 

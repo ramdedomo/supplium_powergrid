@@ -272,7 +272,7 @@ class AddRequest extends ModalComponent
             foreach(SupplyType::all() as $type){
                 if($supply->supply_type == $type->supply_type){
                     $supply->supplytype = $type->supply_name;
-                    $supply->supply_name = $supply->supply_name." (".$supply->supply_stocks.")";
+                    $supply->supply_name = $supply->supply_name." (".$supply->supply_unit.")";
                 }
             }
         }

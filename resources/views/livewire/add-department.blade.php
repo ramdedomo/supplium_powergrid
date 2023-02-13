@@ -7,12 +7,12 @@
             <x-errors class="mb-3" />
 
         <x-input wire:model.defer="department_full" right-icon="user-group" class="mb-3" label="Department"
-            placeholder="" />
+        placeholder="Ex. College of Computing"  />
 
         <div class="gap-3 flex">
             <div class="w-3/4">
-                <x-input wire:model.defer="department_short" label="Short Form"
-                placeholder="" />
+                <x-input wire:model.defer="department_short" label="Tags"
+                placeholder="Ex. Computing" />
             </div>
             <div class="w-1/4 flex justify-center items-center mt-5">
                 <x-toggle label="Non-Teach" wire:model.defer="nonteach" />
