@@ -97,9 +97,20 @@
             <x-input wire:model.defer="email" right-icon="at-symbol" class="grid-cols-1" label="Email"
                 placeholder="" />
 
-  
-                <x-select wire:model="usertype" class="grid-cols-1" right-icon="collection" label="User Type"
-                placeholder="Select" :options='$usertype_' option-label="role" option-value="user_type" />
+                @if($userdetails->user_type == 1)
+                <x-input disabled icon="collection" placeholder="Supply Administrator" label="User Type" />
+                @else
+
+                    @if(Auth::user()->id == $userdetails->id)
+                    <x-select disabled wire:model="usertype" class="grid-cols-1" right-icon="collection" label="User Type"
+                    placeholder="Select" :options='$usertype_' option-label="role" option-value="user_type" />
+                    @else
+                    <x-select wire:model="usertype" class="grid-cols-1" right-icon="collection" label="User Type"
+                    placeholder="Select" :options='$usertype_' option-label="role" option-value="user_type" />
+                    @endif
+
+                @endif
+
        
 
 

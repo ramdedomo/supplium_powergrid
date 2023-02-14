@@ -94,19 +94,18 @@ class EditUser extends ModalComponent
             'userlastname' => 'required',
             'usertype' => 'required',
             'email' => 'required|string|email|max:255|unique:user,email,' . $this->user,
-            'department' => 'required'
         ];
     }
     
     public function update(){
-
+        
         //updating ced to someone
-        if($this->department == 0 && $this->usertype != 5){
+        if($this->department == 0 && $this->usertype != 5 && $this->usertype != 1){
             $this->reset('department');
         }
         
-        //updating someone to ced
-        if($this->department != 0 && $this->usertype == 5){
+          //updating someone to ced
+        if($this->department != 0 && $this->usertype == 5 || $this->usertype == 1){
             $this->department = 0;
         }
 
@@ -129,9 +128,13 @@ class EditUser extends ModalComponent
                         'in' => 'Selected department is teaching, select usertype as "Dean", "Chairman" or "User/Instructor"'
                     ]);
                 }else{
-                    $this->validate(['department' => 'required']);
+                   
                 }
             }
+        }else{
+            $this->validate([
+                'department' => 'required'
+            ]);
         }
         
 

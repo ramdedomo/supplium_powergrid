@@ -63,8 +63,14 @@ class AddUser extends ModalComponent
                         'in' => 'Selected department is teaching, select usertype as "Dean", "Chairman" or "User/Instructor"'
                     ]);
                 }else{
-                    $this->validate(['department' => 'required']);
+                  
                 }
+            }
+        }else{
+            if(Auth::user()->user_type == 1){
+                $this->validate([
+                    'department' => 'required'
+                ]);
             }
         }
      
