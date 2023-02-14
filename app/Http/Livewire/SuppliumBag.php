@@ -129,9 +129,7 @@ class SuppliumBag extends Component
                     }else{
                         $receipt_equipments = Receipt::create([
                             'user_id' => Auth::user()->id,
-                            'supply_status' => 2,
-                            'chair_at' => Carbon::now(),
-                            'dean_at' => Carbon::now(),
+                            'supply_status' => 0,
                             'is_supply' => 0
                         ])->id;
     
@@ -173,6 +171,28 @@ class SuppliumBag extends Component
                         Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
                     }
 
+        
+                    break;
+                case 6:
+                    $receipt_equipments = Receipt::create([
+                        'user_id' => Auth::user()->id,
+                        'supply_status' => 6,
+                        'head_at' => Carbon::now(),
+                        'is_supply' => 0
+                    ])->id;
+
+                    foreach ($equipments as $equipment) {
+                        Requests::create([
+                            'supply_id' => $equipment['id'],
+                            'receipt_id' => $receipt_equipments,
+                            'quantity' => $equipment['quantity'],
+                        ]);
+
+                        //delete from bag
+                        Bag::where('user_id', Auth::user()->id)->where('supply_id', $equipment['id'])->delete();
+                        //decrement stocks
+                        Supply::find($equipment['id'])->decrement('supply_stocks', $equipment['quantity']);
+                    }
         
                     break;
                 case 2:
@@ -259,7 +279,7 @@ class SuppliumBag extends Component
                         Notifications::create([
                             'user_id' => Auth::user()->id,
                             'receipt_id' => $receipt_equipments,
-                            'notification_type' => 105,
+                            'notification_type' => 106,
                             'is_supply' => 0
                         ]);   
     
@@ -277,6 +297,44 @@ class SuppliumBag extends Component
                         ]);
                     }
                
+        
+                    break;
+                case 6:
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'notification_type' => 105,
+                        'is_supply' => 0
+                    ]);   
+                    
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'notification_type' => 0,
+                        'is_supply' => 0
+                    ]);    
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'notification_type' => 9,
+                        'is_supply' => 0
+                    ]);    
+
+                    
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'message_type' => 0
+                    ]);
+
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt_equipments,
+                        'message_type' => 9
+                    ]);
+ 
         
                     break;
                 case 3:

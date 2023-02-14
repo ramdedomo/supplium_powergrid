@@ -13,7 +13,10 @@
     @livewireStyles
     @powerGridStyles
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1"></script>
-    
+    <!-- Alpine Plugins -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+ 
+
     <style>
         [x-cloak] {
             display: none !important;
@@ -339,6 +342,57 @@
                             href="{{route('reports')}}">
                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Reports & Analysis
                          </a>
+
+                        @elseif(Auth::user()->user_type  == 6)
+                         <div class="flex gap-2">
+                             <a class="w-4/5 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                             href="{{ route('dashboard') }}">
+                             <x-icon name="view-list" class="w-5 h-5 mr-2" /> Dashboard
+                             </a>
+           
+                             <a class="w-1/5 flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                             href="{{route('notifications')}}">
+                                 <x-icon name="bell" class="w-5 h-5" />
+                             </a>
+                         </div>
+             
+                             <div class="flex gap-2">
+                                 <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                     href="{{ route('users') }}">
+                                     <x-icon name="users" class="w-5 h-5 mr-2" /> Users
+                                 </a>
+                                 
+                                 <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                     href="{{route('requests')}}">
+                                     <x-icon name="inbox" class="w-5 h-5 mr-2" /> Requests
+                                 </a>
+                             </div>
+ 
+                             <div class="flex gap-2">
+                                 <a class="flex block w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                 href="{{route('list')}}">
+                                 <x-icon name="archive" class="w-5 h-5 mr-2" /> Items
+                                 </a>
+ 
+                                 <a class="flex block  w-1/2 px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                 href="{{route('bag')}}">
+                                 <x-icon name="shopping-bag" class="w-5 h-5 mr-2" /> Bag
+                                 </a>
+                             </div>
+                  
+ 
+ 
+                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                                 href="{{route('myrequests')}}">
+                                 <x-icon name="paper-airplane" class="w-5 h-5 mr-2" /> Requested Items
+                             </a>
+ 
+ 
+                         <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
+                             href="{{route('reports')}}">
+                             <x-icon name="document-report" class="w-5 h-5 mr-2" /> Reports & Analysis
+                          </a>
+
                         @elseif(Auth::user()->user_type  == 4)
                             <a class="flex block px-4 py-2 mt-2 text-sm font-semibold text-gray-800 bg-gray-100 rounded-md hover:text-white  hover:bg-gray-800"
                                 href="{{route('list')}}">
@@ -398,6 +452,8 @@
                                         Chairman
                                     @elseif($user_info->user_type == 4)
                                         User / Instructor
+                                    @elseif($user_info->user_type == 6)
+                                        Head
                                     @else
                                         Campus Executive Director
                                     @endif

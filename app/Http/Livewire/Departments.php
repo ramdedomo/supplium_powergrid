@@ -135,11 +135,11 @@ final class Departments extends PowerGridComponent
             // Column::make('DEPARTMENT', 'department')
             //     ->makeInputRange(),
 
-            Column::make('DEPARTMENT DESCRIPTION', 'department_description')
+            Column::make('DEPARTMENT', 'department_description')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('SHORT FORM', 'department_short')
+            Column::make('TAG', 'department_short')
                 ->sortable()
                 ->searchable(),
 

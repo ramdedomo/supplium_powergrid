@@ -89,9 +89,7 @@ class SupplyOrder extends ModalComponent
                     }else{
                         $receipt = Receipt::create([
                             'user_id' => Auth::user()->id,
-                            'supply_status' => 2,
-                            'chair_at' => Carbon::now(),
-                            'dean_at' => Carbon::now(),
+                            'supply_status' => 0,
                             'is_supply' => $this->issupply
                         ])->id;
       
@@ -107,7 +105,7 @@ class SupplyOrder extends ModalComponent
                         Notifications::create([
                             'user_id' => Auth::user()->id,
                             'receipt_id' => $receipt,
-                            'notification_type' => 105,
+                            'notification_type' => 106,
                             'is_supply' => 0
                         ]);   
     
@@ -126,6 +124,59 @@ class SupplyOrder extends ModalComponent
                     }
 
   
+                    break;
+                case 6:
+
+                    $receipt = Receipt::create([
+                        'user_id' => Auth::user()->id,
+                        'supply_status' => 6,
+                        'head_at' => Carbon::now(),
+                        'is_supply' => $this->issupply
+                    ])->id;
+  
+                    Requests::create([
+                        'supply_id' => $this->supply,
+                        'receipt_id' => $receipt,
+                        'quantity' => $this->quantity,
+                    ]);
+
+                     //decrement stocks
+                     Supply::find($this->supply)->decrement('supply_stocks', $this->quantity);
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt,
+                        'notification_type' => 105,
+                        'is_supply' => 0
+                    ]);   
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt,
+                        'notification_type' => 0,
+                        'is_supply' => 0
+                    ]);    
+
+                    Notifications::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt,
+                        'notification_type' => 9,
+                        'is_supply' => 0
+                    ]);    
+
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt,
+                        'message_type' => 0
+                    ]);
+
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $receipt,
+                        'message_type' => 9
+                    ]);
+
+        
                     break;
                 case 3:
 

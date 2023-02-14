@@ -8,7 +8,7 @@ use App\Models\Receipt;
 use App\Models\Department;
 class SuppliumDashboard extends Component
 {
-    public $simpleModal;
+ 
     public $table1_labels;
     public $table1_date;
     

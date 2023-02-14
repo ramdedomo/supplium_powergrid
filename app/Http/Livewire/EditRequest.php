@@ -7,6 +7,7 @@ use App\Models\Requests;
 use App\Models\User;
 use App\Models\Bag;
 use App\Models\Receipt;
+use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use WireUi\Traits\Actions;
 use Illuminate\Support\Facades\Route;
@@ -130,7 +131,7 @@ class EditRequest extends ModalComponent
     }
 
     public function accept_confirm(){
-
+        
         $status = null;
         $exists = Notifications::where('receipt_id', $this->request)->first();
 
@@ -201,34 +202,64 @@ class EditRequest extends ModalComponent
 
             switch ($this->receipt->supply_status) {
                 case 0:
-                    $status = 1;
+                    if(Department::find(Auth::user()->department)->nonteaching == 0){
+                        $status = 1;
           
-                    Receipt::where('id', $this->request)->update([
-                        'supply_status' => $status,
-                        'chair_at' => Carbon::now()
-                    ]);
-
-                    Notifications::create([
-                        'user_id' => $exists->user_id,
-                        'receipt_id' => $exists->receipt_id,
-                        'notification_type' => 102,
-                        'is_supply' => 0
-                    ]);   
-
-                    Notifications::create([
-                        'user_id' => $exists->user_id,
-                        'receipt_id' => $exists->receipt_id,
-                        'notification_type' => 1,
-                        'is_supply' => 0
-                    ]);   
-
-                    Messages::create([
-                        'user_id' => Auth::user()->id,
-                        'receipt_id' => $exists->receipt_id,
-                        'message_type' => 1
-                    ]);
-
-             
+                        Receipt::where('id', $this->request)->update([
+                            'supply_status' => $status,
+                            'chair_at' => Carbon::now()
+                        ]);
+    
+                        Notifications::create([
+                            'user_id' => $exists->user_id,
+                            'receipt_id' => $exists->receipt_id,
+                            'notification_type' => 102,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Notifications::create([
+                            'user_id' => $exists->user_id,
+                            'receipt_id' => $exists->receipt_id,
+                            'notification_type' => 1,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Messages::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $exists->receipt_id,
+                            'message_type' => 1
+                        ]);
+                    }else{
+                        $status = 6;
+          
+                        Receipt::where('id', $this->request)->update([
+                            'supply_status' => $status,
+                            'head_at' => Carbon::now()
+                        ]);
+    
+                        Notifications::create([
+                            'user_id' => $exists->user_id,
+                            'receipt_id' => $exists->receipt_id,
+                            'notification_type' => 105,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Notifications::create([
+                            'user_id' => $exists->user_id,
+                            'receipt_id' => $exists->receipt_id,
+                            'notification_type' => 9,
+                            'is_supply' => 0
+                        ]);   
+    
+                        Messages::create([
+                            'user_id' => Auth::user()->id,
+                            'receipt_id' => $exists->receipt_id,
+                            'message_type' => 9
+                        ]);
+    
+                    }
+                 
+        
                     break;
                 case 1:
                     $status = 2;
@@ -319,6 +350,33 @@ class EditRequest extends ModalComponent
                         'message_type' => 3
                     ]);
 
+                    break;
+                case 6:
+                    $status = 3;
+                    Receipt::where('id', $this->request)->update([
+                        'supply_status' => $status,
+                        'ced_at' => Carbon::now()
+                    ]);
+
+                    Notifications::create([
+                        'user_id' => $exists->user_id,
+                        'receipt_id' => $exists->receipt_id,
+                        'notification_type' => 103,
+                        'is_supply' => 0
+                    ]);   
+
+                    Notifications::create([
+                        'user_id' => $exists->user_id,
+                        'receipt_id' => $exists->receipt_id,
+                        'notification_type' => 8,
+                        'is_supply' => 0
+                    ]);   
+     
+                    Messages::create([
+                        'user_id' => Auth::user()->id,
+                        'receipt_id' => $exists->receipt_id,
+                        'message_type' => 8
+                    ]);
                     break;
                 case 4:
                     $status = 5;

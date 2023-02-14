@@ -21,6 +21,7 @@ class AddUser extends ModalComponent
     public $userlastname;
     public $usertype;
     public $usertype_;
+    public $usertype_nonteach;
     public $department_;
     public $department;
 
@@ -41,18 +42,33 @@ class AddUser extends ModalComponent
 
 
     public function add(){
-    
+     
         $this->validate();
 
-        foreach ($this->department_ as $dep) {
-            if($dep->department == $this->department && $dep->nonteaching == 1){
-                $this->validate([
-                    'usertype' => 'required|in:4'
-                ],[
-                    'in' => 'Selected department is non-teaching, select usertype as "User"'
-                ]);
+
+        if($this->usertype == 1){
+            foreach ($this->department_ as $dep) {
+                if($dep->department == $this->department && $dep->nonteaching == 1){
+                    $this->validate([
+                        'usertype' => 'required|in:4,6',
+                        'department' => 'required'
+                    ],[
+                        'in' => 'Selected department is non-teaching, select usertype as "User/Instructor" or "Head"'
+                    ]);
+                }elseif($dep->department == $this->department && $dep->nonteaching == 0){
+                    $this->validate([
+                        'usertype' => 'required|in:2,3,4',
+                        'department' => 'required'
+                    ],[
+                        'in' => 'Selected department is teaching, select usertype as "Dean", "Chairman" or "User/Instructor"'
+                    ]);
+                }else{
+                    $this->validate(['department' => 'required']);
+                }
             }
         }
+     
+
 
         if(Auth::user()->user_type != 1){
             $created = User::create([
@@ -88,7 +104,6 @@ class AddUser extends ModalComponent
         }
 
 
-
         if($created){
             $this->dialog([
                 'title'       => 'User Added!',
@@ -108,22 +123,38 @@ class AddUser extends ModalComponent
 
     }
 
+
     public function render()
     {
 
         if(Auth::user()->user_type != 1){
-            $this->usertype_ = UserType::where('user_type', '>', 1)->where('user_type', '<', 5)->get();
+            if(Auth::user()->user_type == 6){
+                $this->usertype_ = UserType::whereIn('user_type', [6,4])->get();
 
-            foreach(Department::all() as $d){
-                if($d->department == Auth::user()->department){
-                    $this->department_ = [
-                        'id' => $d->department,
-                        'department' => $d->department_short
-                    ];
+                foreach(Department::all() as $d){
+                    if($d->department == Auth::user()->department){
+                        $this->department_ = [
+                            'id' => $d->department,
+                            'department' => $d->department_short
+                        ];
+                    }
+                }
+            }else{
+                $this->usertype_ = UserType::where('user_type', '>', 1)->where('user_type', '<', 5)->get();
+
+                foreach(Department::all() as $d){
+                    if($d->department == Auth::user()->department){
+                        $this->department_ = [
+                            'id' => $d->department,
+                            'department' => $d->department_short
+                        ];
+                    }
                 }
             }
+
         }else{
             $this->usertype_ = UserType::where('user_type', '>', 1)->get();
+            
             $this->department_ = Department::where('department', '!=', 0)->get();
   
             foreach ($this->department_ as $dep) {

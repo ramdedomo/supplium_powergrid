@@ -35,14 +35,27 @@ class EditUser extends ModalComponent
 
      
         if(Auth::user()->user_type != 1){
-            $this->usertype_ = UserType::where('user_type', '>', 1)->get();
+            if(Auth::user()->user_type == 6){
+                $this->usertype_ = UserType::whereIn('user_type', [6,4])->get();
 
-            foreach(Department::all() as $d){
-                if($d->department == Auth::user()->department){
-                    $this->department_ = [
-                        'id' => $d->department,
-                        'department' => $d->department_short
-                    ];
+                foreach(Department::all() as $d){
+                    if($d->department == Auth::user()->department){
+                        $this->department_ = [
+                            'id' => $d->department,
+                            'department' => $d->department_short
+                        ];
+                    }
+                }
+            }else{
+                $this->usertype_ = UserType::where('user_type', '>', 1)->where('user_type', '<', 5)->get();
+
+                foreach(Department::all() as $d){
+                    if($d->department == Auth::user()->department){
+                        $this->department_ = [
+                            'id' => $d->department,
+                            'department' => $d->department_short
+                        ];
+                    }
                 }
             }
         }else{
@@ -87,7 +100,40 @@ class EditUser extends ModalComponent
     
     public function update(){
 
+        //updating ced to someone
+        if($this->department == 0 && $this->usertype != 5){
+            $this->reset('department');
+        }
+        
+        //updating someone to ced
+        if($this->department != 0 && $this->usertype == 5){
+            $this->department = 0;
+        }
+
         $this->validate();
+
+        if($this->usertype == 1){
+            foreach ($this->department_ as $dep) {
+                if($dep->department == $this->department && $dep->nonteaching == 1){
+                    $this->validate([
+                        'usertype' => 'required|in:4,6',
+                        'department' => 'required'
+                    ],[
+                        'in' => 'Selected department is non-teaching, select usertype as "User/Instructor" or "Head"'
+                    ]);
+                }elseif($dep->department == $this->department && $dep->nonteaching == 0){
+                    $this->validate([
+                        'usertype' => 'required|in:2,3,4',
+                        'department' => 'required'
+                    ],[
+                        'in' => 'Selected department is teaching, select usertype as "Dean", "Chairman" or "User/Instructor"'
+                    ]);
+                }else{
+                    $this->validate(['department' => 'required']);
+                }
+            }
+        }
+        
 
         if(Auth::user()->user_type != 1){
             $updated = User::where('id', $this->user)

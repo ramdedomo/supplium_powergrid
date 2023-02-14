@@ -31,6 +31,16 @@ class CheckRoles
                     return redirect()->back();
                 }
     
+            }elseif(Auth::user()->user_type == 6){
+    
+                if(
+                    $request->route()->uri() == "departments" ||  
+                    $request->route()->uri() == "items"
+                    ){
+        
+                        return redirect()->back();
+                }
+    
             }elseif(Auth::user()->user_type == 2){
     
                 if(

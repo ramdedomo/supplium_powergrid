@@ -145,13 +145,22 @@
 
 
     @elseif($receipt->is_supply == 0)
-        @if (is_null($receipt->chair_at) && is_null($receipt->canceled_at) && $user->user_type == 4)
+
+        @if(App\Models\Department::find(Auth::user()->department)->nonteaching == 1)
+            @if (is_null($receipt->head_at) && is_null($receipt->canceled_at) && $user->user_type == 4)
             <x-button wire:click="cancel" class="w-full" outline label="Cancel" />
+            @endif
+        @else
+            @if (is_null($receipt->chair_at) && is_null($receipt->canceled_at) && $user->user_type == 4)
+            <x-button wire:click="cancel" class="w-full" outline label="Cancel" />
+            @endif
+
+            @if (is_null($receipt->dean_at) && is_null($receipt->canceled_at) && $user->user_type == 3)
+                <x-button wire:click="cancel" class="w-full" outline label="Cancel" />
+            @endif
         @endif
 
-        @if (is_null($receipt->dean_at) && is_null($receipt->canceled_at) && $user->user_type == 3)
-            <x-button wire:click="cancel" class="w-full" outline label="Cancel" />
-        @endif
+ 
 
         <hr class="my-3">
 
@@ -204,21 +213,30 @@
                                 <span class="font-bold"> {{ date_format(Carbon\Carbon::parse($receipt->accepted_at), 'M/d h:i A') }}</span>
                             </div>
                             @endif --}}
-
-            @if (!is_null($receipt->chair_at))
+            @if(App\Models\Department::find(Auth::user()->department)->nonteaching == 1)
+                @if (!is_null($receipt->head_at))
+                <div class="flex justify-between">
+                    Head (Approved):
+                    <span class="font-bold">
+                        {{ date_format(Carbon\Carbon::parse($receipt->head_at), 'M/d h:i A') }}</span>
+                </div>
+                @endif
+            @else
+               @if (!is_null($receipt->chair_at))
                 <div class="flex justify-between">
                     Chair (Approved):
                     <span class="font-bold">
                         {{ date_format(Carbon\Carbon::parse($receipt->chair_at), 'M/d h:i A') }}</span>
                 </div>
-            @endif
+                @endif
 
-            @if (!is_null($receipt->dean_at))
-                <div class="flex justify-between">
-                    Dean (Approved):
-                    <span class="font-bold">
-                        {{ date_format(Carbon\Carbon::parse($receipt->dean_at), 'M/d h:i A') }}</span>
-                </div>
+                @if (!is_null($receipt->dean_at))
+                    <div class="flex justify-between">
+                        Dean (Approved):
+                        <span class="font-bold">
+                            {{ date_format(Carbon\Carbon::parse($receipt->dean_at), 'M/d h:i A') }}</span>
+                    </div>
+                @endif
             @endif
 
             @if(!is_null($receipt->ced_at))
@@ -268,27 +286,50 @@
             <div class="grid-cols-1 text-center text-sm bg-red-500 text-white px-2 py-1 rounded-full"> Canceled
             </div>
         @else
-            <div class="grid grid-cols-6 mb-3 gap-3 p-1 border-2 rounded-full shadow-sm">
-                <div
-                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Placed</div>
-                {{-- <div class="grid-cols-1 text-center text-sm @if (is_null($receipt->accepted_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Accepted</div> --}}
-                <div
-                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->chair_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Chair</div>
-                <div
-                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Dean</div>
-                <div
-                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> CED</div>
-                <div
-                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Pick</div>
-                <div
-                    class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
-                    <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Done</div>
-            </div>
+
+            @if(App\Models\Department::find(Auth::user()->department)->nonteaching == 1)
+                <div class="flex mb-3 gap-3 p-1 border-2 rounded-full shadow-sm">
+                    <div
+                        class="w-1/5 text-center text-sm flex items-center justify-center @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Placed</div>
+                    {{-- <div class="grid-cols-1 text-center text-sm @if (is_null($receipt->accepted_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Accepted</div> --}}
+                    <div
+                        class="w-1/5 text-center text-sm flex items-center justify-center @if (is_null($receipt->head_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Head</div>
+                    <div
+                        class="w-1/5 text-center text-sm flex items-center justify-center @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> CED</div>
+                    <div
+                        class="w-1/5 text-center text-sm flex items-center justify-center @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Pick</div>
+                    <div
+                        class="w-1/5 text-center text-sm flex items-center justify-center @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Done</div>
+                </div>
+            @else
+                <div class="grid grid-cols-6 mb-3 gap-3 p-1 border-2 rounded-full shadow-sm">
+                    <div
+                        class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->created_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Placed</div>
+                    {{-- <div class="grid-cols-1 text-center text-sm @if (is_null($receipt->accepted_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">Accepted</div> --}}
+                    <div
+                        class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->chair_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Chair</div>
+                    <div
+                        class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->dean_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Dean</div>
+                    <div
+                        class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->ced_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> CED</div>
+                    <div
+                        class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->supply_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Pick</div>
+                    <div
+                        class="grid-cols-1 text-center text-sm flex items-center justify-center @if (is_null($receipt->done_at)) bg-gray-100 text-gray-400 @else bg-amber-500 text-white @endif px-2 py-1 rounded-full">
+                        <x-icon name="check-circle" class="w-3 h-3 mr-2" solid /> Done</div>
+                </div>
+            @endif
+         
         @endif
 
 
@@ -301,19 +342,22 @@
         </div>
         @endif
 
-        @if(Auth::user()->user_type == 2 && $receipt->supply_status == 1)
-        <div class="my-3">
-            <x-button wire:click="accept" amber class="w-full mb-2" label="Accept Request (Dean)" />
-            <x-button wire:click="cancel" class="w-full mb-2" outline label="Cancel" />
-        </div>
-        @endif
 
-        @if(Auth::user()->user_type == 3 && $receipt->supply_status == 0)
-        <div class="my-3">
-            <x-button wire:click="accept" amber class="w-full mb-2" label="Accept Request (Chair)" />
-            <x-button wire:click="cancel" class="w-full mb-2" outline label="Cancel" />
-        </div>
-        @endif
+            @if(Auth::user()->user_type == 2 && $receipt->supply_status == 1)
+            <div class="my-3">
+                <x-button wire:click="accept" amber class="w-full mb-2" label="Accept Request (Dean)" />
+                <x-button wire:click="cancel" class="w-full mb-2" outline label="Cancel" />
+            </div>
+            @endif
+
+            @if(Auth::user()->user_type == 3 && $receipt->supply_status == 0)
+            <div class="my-3">
+                <x-button wire:click="accept" amber class="w-full mb-2" label="Accept Request (Chair)" />
+                <x-button wire:click="cancel" class="w-full mb-2" outline label="Cancel" />
+            </div>
+            @endif
+  
+      
 
         @if(Auth::user()->user_type == 5 && $receipt->supply_status == 2)
         <div class="my-3">
@@ -507,6 +551,21 @@
                         </div>
                     </div>
                     @break
+
+                @case(9)
+                    <div class="flex @if(Auth::user()->id == $message->user_id) justify-end @else justify-start @endif p-2 text-start">
+                        <div class="w-3/5 rounded-md border-b-2 shadow-md border-amber-500 bg-gray-50 p-3 hover:bg-white transition ease-in-out">
+                        <div class="font-bold">
+                            {{$message->firstname . ' ' . $message->lastname}} - Head
+                        </div>
+                        <div class="text-amber-500">
+                        Request <span class="font-bold">#{{$receipt->id}}</span> Approved (Head).
+                        </div>
+                    
+                        <div class="mt-2 text-xs font-bold border-t-2 pt-2 border-gray-100">{{ date_format(Carbon\Carbon::parse($message->created_at), 'M/d h:i A') }}</div>
+                        </div>
+                    </div>
+                @break
                     
                 @case(3)
                     <div class="flex @if(Auth::user()->id == $message->user_id) justify-end @else justify-start @endif p-2 text-start">
@@ -582,6 +641,8 @@
                 </div>
                 </div>
                 @break
+
+
 
                 @case(10)
                     <div class="flex @if(Auth::user()->id == $message->user_id) justify-end @else justify-start @endif p-2 text-start">
